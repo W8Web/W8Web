@@ -1,0 +1,24 @@
+
+<mat-card style="text-align: left;">
+    <mat-card-header>
+        <mat-card-title>
+            <mat-icon>location_city</mat-icon>
+            Cidade
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <img mat-card-image 
+             class="jeitoFoto"
+             src="data:image/jpeg;base64,{{ cidade.imagem }}">
+        <p>
+            Nome da Cidade: <strong> {{ cidade.nome }}</strong> <br />
+            Estado: <strong>{{ cidade.uf }}</strong> <br />
+            Código IBGE:<strong> {{ cidade.codigoIbge }}</strong> <br />
+            Região:<strong> {{ cidade.regiao }}</strong>
+        </p>
+    </mat-card-content>
+
+    <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="fechar()">Fechar</button>
+    </mat-card-actions>
+</mat-card>

@@ -1,0 +1,3018 @@
+;create TABLE cidade
+	(
+	Id SERIAL,
+	CodigoIBGE INT NOT NULL,
+	UF varchar(2) NOT NULL,
+	Nome varchar(40) NOT NULL ,
+	NomeFonema varchar(40) NOT NULL ,
+	Regiao varchar(20) NOT NULL ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL ,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT cidadeId PRIMARY KEY (Id)
+	)
+
+;create TABLE Pessoa
+	(
+	Id SERIAL,
+	Nome varchar(100) NOT NULL,
+	NomeFonema varchar(50) NOT NULL ,
+	Tratamento varchar(30) NOT NULL,
+	TratamentoFonema varchar(30) NOT NULL,
+	Apelido varchar(30) NOT NULL,
+	ApelidoFonema varchar(30) NOT NULL,
+	CodigoAnterior varchar(10) DEFAULT NULL,
+	Tipo varchar(10) NOT NULL,
+	DataNascimento TIMESTAMP DEFAULT NULL,
+	Sexo varchar(1) DEFAULT 'F',
+	EstadoCivil varchar(10) DEFAULT NULL,
+	Observacao TEXT ,
+	FisJur varchar(1) DEFAULT 'F',
+	RG varchar(15) DEFAULT NULL,
+	CPF varchar(11) DEFAULT NULL,
+	CNPJ varchar(15) DEFAULT NULL,
+	InscricaoEstadual varchar(15) DEFAULT NULL,
+	InscricaoMunicipal varchar(15) DEFAULT NULL,
+	Profissao varchar(30) DEFAULT NULL,
+	PermiteSMS BOOL DEFAULT TRUE,
+	PermiteEmail BOOL DEFAULT TRUE,
+	Status varchar(1) DEFAULT '0',
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT PessoaId PRIMARY KEY (Id)
+	)
+;CREATE INDEX CPF_KEY ON Pessoa (CPF)
+
+;create TABLE Empresa
+	(
+	Id SERIAL,
+	PessoaId INT DEFAULT NULL,
+	IdInnfotech INT NOT NULL,
+	ValorAlqIss FLOAT DEFAULT 0,
+	Logotipo BYTEA NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT EmpresaId PRIMARY KEY (Id),
+	CONSTRAINT Empresa_PessoaId FOREIGN KEY (PessoaId) REFERENCES Pessoa (Id) ON UPDATE CASCADE )
+
+;create TABLE Contato
+	(
+	Id SERIAL,
+	PessoaId INT DEFAULT NULL,
+	Tipo varchar(10) NOT NULL,
+	Detalhe varchar(50) NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT ContatoId PRIMARY KEY (Id),
+	CONSTRAINT Contato_PessoaId FOREIGN KEY (PessoaId) REFERENCES Pessoa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE endereco
+	(
+	Id SERIAL,
+	PessoaId INT DEFAULT NULL,
+	Tipo varchar(10) NOT NULL,
+	Logradouro varchar(100) NOT NULL,
+	LogradouroFonema varchar(100) NOT NULL,
+	Numero varchar(10) NOT NULL,
+	Complemento varchar(20) NOT NULL,
+	Bairro varchar(50) DEFAULT NULL,
+	BairroFonema varchar(50) DEFAULT NULL,
+	Cidade varchar(50) DEFAULT NULL,
+	CidadeFonema varchar(50) DEFAULT NULL,
+	UF varchar(2) DEFAULT NULL,
+	CEP varchar(8) DEFAULT NULL,
+	Pais varchar(30) DEFAULT NULL,
+	PaisFonema varchar(30) DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT enderecoId PRIMARY KEY (Id),
+	CONSTRAINT endereco_PessoaId FOREIGN KEY (PessoaId) REFERENCES Pessoa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE telefone
+	(
+	Id SERIAL,
+	PessoaId INT DEFAULT NULL,
+	Tipo varchar(10) NOT NULL,
+	TipoFonema varchar(10) NOT NULL,
+	DDD varchar(2) NOT NULL,
+	Numero varchar(10) NOT NULL,
+	Ramal varchar(20) DEFAULT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT telefoneId PRIMARY KEY (Id),
+	CONSTRAINT telefone_PessoaId FOREIGN KEY (PessoaId) REFERENCES Pessoa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE InstituicaoBancaria
+	(
+	Id SERIAL,
+	Numero varchar(3) NOT NULL,
+	Nome varchar(50) NOT NULL,
+	NomeFonema varchar(50) NOT NULL,
+	NomeReduzido varchar(30) NOT NULL,
+	NomeReduzidoFonema varchar(30) NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT InstituicaoBancariaId PRIMARY KEY (Id)
+	)
+;CREATE INDEX InstituicaoBancaria_NomeReduzido_KEY ON InstituicaoBancaria (NomeReduzido)
+;CREATE INDEX InstituicaoBancaria_Numero_KEY ON InstituicaoBancaria (Numero)
+
+;create TABLE Horario
+	(
+	Id SERIAL,
+	Dia INT NOT NULL,
+	Horainicial TIMESTAMP NOT NULL DEFAULT '2000-01-01 00:00:01',
+	InicioIntervalo TIMESTAMP DEFAULT NULL,
+	FinalIntervalo TIMESTAMP DEFAULT NULL,
+	HoraFinal TIMESTAMP NOT NULL DEFAULT '2000-01-01 23:59:59',
+	Intervalo INT NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT HorarioId PRIMARY KEY (Id)
+	)
+
+;create TABLE profissional
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	PessoaId INT DEFAULT NULL,
+	PessoaJurId INT DEFAULT NULL,
+	InstituicaobancariaId INT DEFAULT NULL,
+	Codigo INT NOT NULL,
+	NomeReduzido varchar(30) NOT NULL,
+	NomeReduzidoFonema varchar(30) NOT NULL,
+	Senha varchar(50) DEFAULT NULL,
+	DataAdmissao TIMESTAMP DEFAULT NULL,
+	DataSaida TIMESTAMP DEFAULT NULL,
+	Salario FLOAT DEFAULT 0,
+	NroSindicato varchar(20) DEFAULT NULL,
+	DataInicioContrato TIMESTAMP DEFAULT NULL,
+	DataFinalContrato TIMESTAMP DEFAULT NULL,
+	Agencia varchar(6) DEFAULT NULL,
+	ContaCorrente varchar(15) DEFAULT NULL,
+	GeraNF BOOL DEFAULT FALSE,
+	RecebePorCartao BOOL DEFAULT FALSE,
+	PosicaoAgenda INT DEFAULT 0,
+	PosicaoRodizio INT DEFAULT 0,
+	PosicaoRodizioFut INT DEFAULT 0,
+	AgendaAberta BOOL DEFAULT FALSE,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT profissionalId PRIMARY KEY (Id),
+	CONSTRAINT profissional_InstituicaobancariaId FOREIGN KEY (InstituicaobancariaId) REFERENCES Instituicaobancaria (Id) ON UPDATE CASCADE,
+	CONSTRAINT profissional_PessoaId FOREIGN KEY (PessoaId) REFERENCES Pessoa (Id) ON UPDATE CASCADE,
+	CONSTRAINT profissional_PessoaJurId FOREIGN KEY (PessoaJurId) REFERENCES Pessoa (Id) ON UPDATE CASCADE,
+	CONSTRAINT profissional_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT profissional_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+;CREATE INDEX Profissional_NomeReduzido_KEY ON profissional (NomeReduzido)
+
+;create TABLE ProfissionalHorario
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ProfissionalId INT NOT NULL,
+	HorarioId INT NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT ProfissionalHorarioId PRIMARY KEY (Id, EmpresaId, FilialId),
+	CONSTRAINT ProfissionalHorario_ProfissionalId FOREIGN KEY (ProfissionalId) REFERENCES Profissional (Id) ON UPDATE CASCADE,
+	CONSTRAINT ProfissionalHorario_HorarioId FOREIGN KEY (HorarioId) REFERENCES Horario (Id) ON UPDATE CASCADE,
+	CONSTRAINT ProfissionalHorario_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT ProfissionalHorario_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Fonte
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Nome varchar(50) NOT NULL,
+	NomeFonema varchar(50) NOT NULL,
+	Sigla varchar(10) NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT FonteId PRIMARY KEY (Id),
+	CONSTRAINT Fonte_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Fonte_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Categoria
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Nome varchar(50) NOT NULL,
+	NomeFonema varchar(50) NOT NULL,
+	Sigla varchar(10) NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT CategoriaId PRIMARY KEY (Id),
+	CONSTRAINT Categoria_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Categoria_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Convenio
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Nome varchar(20) NOT NULL,
+	NomeFonema varchar(20) NOT NULL,
+	Sigla varchar(10) NOT NULL,
+	DataInicio TIMESTAMP NOT NULL,
+	DataFinal TIMESTAMP NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT ConvenioId PRIMARY KEY (Id),
+	CONSTRAINT convenio_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT convenio_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE ConvenioHorario
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ConvenioId INT NOT NULL,
+	HorarioId INT NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT ConvenioHorarioId PRIMARY KEY (Id),
+	CONSTRAINT ConvenioHorario_convenioId FOREIGN KEY (convenioId) REFERENCES convenio (Id) ON UPDATE CASCADE,
+	CONSTRAINT ConvenioHorario_HorarioId FOREIGN KEY (HorarioId) REFERENCES Horario (Id) ON UPDATE CASCADE,
+	CONSTRAINT ConvenioHorario_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT ConvenioHorario_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE empresaconveniada
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	PessoaId INT NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT empresaconveniadaId PRIMARY KEY (Id),
+	CONSTRAINT empresaconveniada_PessoaId FOREIGN KEY (PessoaId) REFERENCES Pessoa (Id) ON UPDATE CASCADE,
+	CONSTRAINT empresaconveniada_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT empresaconveniada_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Cliente
+	(
+	Id SERIAL,
+	PessoaId INT NOT NULL,
+	ProfissionalId INT DEFAULT NULL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Nome varchar(50) NOT NULL,
+	NomeFonema varchar(50) NOT NULL,
+	ClienteDesde TIMESTAMP DEFAULT NULL,
+	CartaoFidelidade INT DEFAULT NULL,
+	ClienteUserAPP INT DEFAULT NULL,
+	NomePai varchar(50) DEFAULT NULL,
+	NomePaiFonema varchar(50) DEFAULT NULL,
+	NomeMae varchar(50) DEFAULT NULL,
+	NomeMaeFonema varchar(50) DEFAULT NULL,
+	MsgPrimeiraVez BOOL DEFAULT FALSE,
+	MsgAniversario varchar(4) DEFAULT 0,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT ClienteId PRIMARY KEY (Id),
+	CONSTRAINT Cliente_PessoaId FOREIGN KEY (PessoaId) REFERENCES Pessoa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Cliente_ProfissionalId FOREIGN KEY (ProfissionalId) REFERENCES Profissional (Id) ON UPDATE CASCADE,
+	CONSTRAINT Cliente_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Cliente_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+;CREATE INDEX Cliente_CartaoFidelidade_KEY ON Cliente (CartaoFidelidade)
+;CREATE INDEX Cliente_Nome_KEY ON Cliente (Nome)
+
+;create TABLE Configuracao
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Chave varchar(20) NOT NULL,
+	Conteudo varchar (60) NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT ConfiguracaoId PRIMARY KEY (Id),
+	CONSTRAINT configuracao_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT configuracao_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Controle
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	PrxNumero INT DEFAULT 0,
+	CONSTRAINT ControleId PRIMARY KEY (Id),
+	CONSTRAINT Controle_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Controle_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Feriado
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Data TIMESTAMP NOT NULL,
+	Nome varchar(50) NOT NULL,
+	NomeFonema varchar(50) NOT NULL,
+	Descricao TEXT,
+	PadraoSistema BOOL DEFAULT TRUE,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT FeriadoId PRIMARY KEY (Id),
+	CONSTRAINT Feriado_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Feriado_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Historico
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	HistoricoPadrao varchar(50) NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT HistoricoId PRIMARY KEY (Id),
+	CONSTRAINT historico_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT historico_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE GrupoItem
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Nome varchar(50) NOT NULL,
+	NomeFonema varchar(50) NOT NULL,
+	Sigla varchar(10) NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT GrupoItemId PRIMARY KEY (Id),
+	CONSTRAINT GrupoItem_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT GrupoItem_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE LocalEstoque
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Nome varchar(50) NOT NULL,
+	NomeFonema varchar(50) NOT NULL,
+	Sigla varchar(10) NOT NULL,
+	Grupo varchar(3) NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT LocalEstoqueId PRIMARY KEY (Id),
+	CONSTRAINT localestoque_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT localestoque_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Lua
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Tipo varchar(2) NOT NULL,
+	Data TIMESTAMP NOT NULL,
+	CONSTRAINT LuaId PRIMARY KEY (Id),
+	CONSTRAINT lua_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT lua_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE ContaBancaria
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	InstituicaobancariaId INT NOT NULL,
+	Codigo varchar(15) NOT NULL,
+	Nome varchar(50) NOT NULL,
+	NomeFonema varchar(50) NOT NULL,
+	Descricao varchar(50) NOT NULL,
+	Agencia varchar(6) NOT NULL,
+	NomeAgencia varchar(30) NOT NULL,
+	Limite FLOAT DEFAULT 0,
+	Observacao TEXT ,
+	Status varchar(1) DEFAULT '0',
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT ContaBancariaId PRIMARY KEY (Id),
+	CONSTRAINT contabancaria_InstituicaobancariaId FOREIGN KEY (InstituicaobancariaId) REFERENCES Instituicaobancaria (Id) ON UPDATE CASCADE,
+	CONSTRAINT contabancaria_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT contabancaria_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE ContaLivroCaixa
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Descricao varchar(50) NOT NULL,
+	Tipo varchar(1) DEFAULT 'A',
+	Observacao TEXT ,
+	Status varchar(1) DEFAULT '0',
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT ContaLivroCaixaId PRIMARY KEY (Id),
+	CONSTRAINT ContaLivroCaixa_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT ContaLivroCaixa_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE ContaADM
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	CodigoPaiId INT DEFAULT NULL,
+	CodigoAvoId INT DEFAULT NULL,
+	Codigo varchar(7) NOT NULL,
+	Nome varchar(30) NOT NULL,
+	NomeFonema varchar(30) NOT NULL,
+	Observacao TEXT ,
+	AceitaLancamento BOOL DEFAULT TRUE,
+	ClassificacaoDR varchar(3) DEFAULT NULL,
+	Status varchar(1) DEFAULT '0',
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT ContaADMId PRIMARY KEY (Id),
+	CONSTRAINT contaadm_CodigoPaiId FOREIGN KEY (CodigoPaiId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT contaadm_CodigoAvoId FOREIGN KEY (CodigoAvoId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT contaadm_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT contaadm_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+;CREATE INDEX ContaADM_Codigo_KEY ON ContaADM (Codigo)
+
+;create TABLE Modelo
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Nome varchar(30) NOT NULL,
+	NomeFonema varchar(30) NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT ModeloId PRIMARY KEY (Id),
+	CONSTRAINT modelo_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT modelo_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE GrupoAnalise
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Nome varchar(50) NOT NULL,
+	NomeFonema varchar(50) NOT NULL,
+	Sigla varchar(10) NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT GrupoAnaliseId PRIMARY KEY (Id),
+	CONSTRAINT GrupoAnalise_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT GrupoAnalise_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Servico
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ContaADMId INT DEFAULT NULL,
+	GrupoAnaliseId INT DEFAULT NULL,
+	Codigo INT NOT NULL,
+	CodigoImportado varchar(20) DEFAULT NULL,
+	Nome varchar(30) NOT NULL,
+	NomeFonema varchar(30) NOT NULL,
+	Sigla varchar(10) NOT NULL,
+	Descricao varchar(50) NOT NULL,
+	DescricaoNF varchar(50) NOT NULL,
+	Valor FLOAT DEFAULT NULL,
+	CustoOperacional FLOAT DEFAULT 0,
+	CustoPercentual FLOAT DEFAULT 0,
+	ListaPreco BOOL DEFAULT FALSE,
+	GeraEstoque BOOL DEFAULT FALSE,
+	GeraConsumo BOOL DEFAULT FALSE,
+	PosicaoAgenda INT DEFAULT 0,
+	PosicaoRodizio INT DEFAULT 0,
+	QuantosSimultaneos INT DEFAULT 1,
+	Pontos FLOAT DEFAULT 0,
+	TempoExecucao INT DEFAULT 0,
+	TempoValidade INT DEFAULT 0,
+	Cor INT NOT NULL,
+	Espontaneo BOOL DEFAULT TRUE,
+	CodigoNFe varchar(10) DEFAULT NULL,
+	Observacao TEXT ,
+	Exame BOOL DEFAULT FALSE,
+	AliquotaImposto FLOAT DEFAULT 0,
+	Status varchar(1) DEFAULT '0',
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT ServicoId PRIMARY KEY (Id),
+	CONSTRAINT servico_ContaADMId FOREIGN KEY (ContaADMId) REFERENCES ContaADM (Id) ON UPDATE CASCADE,
+	CONSTRAINT servico_GrupoAnaliseId FOREIGN KEY (GrupoAnaliseId) REFERENCES GrupoAnalise (Id) ON UPDATE CASCADE,
+	CONSTRAINT servico_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT servico_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+;CREATE INDEX Servico_Nome_KEY ON servico (Nome)
+
+;create TABLE servicohorario
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ServicoId INT NOT NULL,
+	HorarioId INT NOT NULL,
+	CONSTRAINT servicohorarioId PRIMARY KEY (Id),
+	CONSTRAINT servicohorario_ServicoId FOREIGN KEY (ServicoId) REFERENCES Servico (Id) ON UPDATE CASCADE,
+	CONSTRAINT servicohorario_HorarioId FOREIGN KEY (HorarioId) REFERENCES Horario (Id) ON UPDATE CASCADE,
+	CONSTRAINT servicohorario_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT servicohorario_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Pacote
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ServicoId INT NOT NULL,
+	TaxaAdministracao FLOAT DEFAULT 0,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT PacoteId PRIMARY KEY (Id),
+	CONSTRAINT Pacote_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Pacote_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE PacoteServico
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	PacoteId INT NOT NULL,
+	ServicoId INT NOT NULL,
+	Ordem INT NOT NULL,
+	Quantidade FLOAT NOT NULL,
+	Valor FLOAT NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT PacoteServicoId PRIMARY KEY (Id),
+	CONSTRAINT PacoteServico_PacoteId FOREIGN KEY (PacoteId) REFERENCES Pacote (Id) ON UPDATE CASCADE,
+	CONSTRAINT PacoteServico_ServicoId FOREIGN KEY (ServicoId) REFERENCES Servico (Id) ON UPDATE CASCADE,
+	CONSTRAINT PacoteServico_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT PacoteServico_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Cartao
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ContaADMId INT DEFAULT NULL,
+	ContaBancariaId INT DEFAULT NULL,
+	ProfissionalId INT DEFAULT NULL,
+	Nome varchar(20) NOT NULL,
+	NomeFonema varchar(20) NOT NULL,
+	Sigla varchar(10) NOT NULL,
+	DiasEmpresa INT DEFAULT 0,
+	DiasProfissional INT DEFAULT 0,
+	NumeroVezes INT DEFAULT 1,
+	PrimeiroVctoProfissional INT DEFAULT 0,
+	TaxaEmpresa FLOAT DEFAULT 0,
+	TaxaProfissional FLOAT DEFAULT 0,
+	LimiteMensal FLOAT DEFAULT 0,
+	CartaoPadrao BOOL DEFAULT FALSE,
+	Observacao TEXT ,
+	Status varchar(1) DEFAULT '0',
+	Icone BYTEA DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT CartaoId PRIMARY KEY (Id),
+	CONSTRAINT cartao_ContaBancariaId FOREIGN KEY (ContaBancariaId) REFERENCES ContaBancaria (Id) ON UPDATE CASCADE,
+	CONSTRAINT cartao_ProfissionalId FOREIGN KEY (ProfissionalId) REFERENCES Profissional (Id) ON UPDATE CASCADE,
+	CONSTRAINT cartao_ContaADMId FOREIGN KEY (ContaADMId) REFERENCES ContaADM (Id) ON UPDATE CASCADE,
+	CONSTRAINT cartao_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT cartao_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Sala
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Codigo varchar(10) NOT NULL,
+	Nome varchar(50) NOT NULL,
+	NomeFonema varchar(50) NOT NULL,
+	Sigla varchar(10) NOT NULL,
+	Observacao TEXT ,
+	TempoLimpeza INT NOT NULL,
+	PodeAgendar BOOL DEFAULT FALSE,
+	PosicaoAgenda INT DEFAULT 0,
+	PosicaoRodizio INT DEFAULT 0,
+	Status varchar(1) DEFAULT '0',
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT SalaId PRIMARY KEY (Id),
+	CONSTRAINT Sala_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Sala_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+;CREATE INDEX Sala_Codigo_KEY ON Sala (Codigo)
+
+;create TABLE SalaHorario
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	SalaId INT NOT NULL,
+	HorarioId INT NOT NULL ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT SalaHorarioId PRIMARY KEY (Id),
+	CONSTRAINT SalaHorario_SalaId FOREIGN KEY (SalaId) REFERENCES Sala (Id) ON UPDATE CASCADE,
+	CONSTRAINT SalaHorario_HorarioId FOREIGN KEY (HorarioId) REFERENCES Horario (Id) ON UPDATE CASCADE,
+	CONSTRAINT SalaHorario_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT SalaHorario_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE GrupoProfissional
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Nome varchar(20) NOT NULL,
+	NomeFonema varchar(20) NOT NULL,
+	Sigla varchar(10) NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT GrupoProfissionalId PRIMARY KEY (Id),
+	CONSTRAINT GrupoProfissional_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT GrupoProfissional_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE GrupoServico
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Nome varchar(20) NOT NULL,
+	NomeFonema varchar(20) NOT NULL,
+	Sigla varchar(10) NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT GrupoServicoId PRIMARY KEY (Id),
+	CONSTRAINT GrupoServico_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT GrupoServico_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Recurso
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Nome varchar(20) NOT NULL,
+	NomeFonema varchar(20) NOT NULL,
+	Sigla varchar(10) NOT NULL,
+	Status varchar(1) DEFAULT '0',
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT RecursoId PRIMARY KEY (Id),
+	CONSTRAINT Recurso_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Recurso_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Processo
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Modulo varchar(15) NOT NULL,
+	Chave varchar(10) NOT NULL,
+	Nome varchar(20) NOT NULL,
+	NomeFonema varchar(20) NOT NULL,
+	Descricao varchar(50) NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT ProcessoId PRIMARY KEY (Id),
+	CONSTRAINT Processo_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Processo_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE TipoPagamento
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Nome varchar(50) NOT NULL,
+	NomeFonema varchar(50) NOT NULL,
+	Sigla varchar(10) NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT TipoPagamentoId PRIMARY KEY (Id),
+	CONSTRAINT TipoPagamento_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT TipoPagamento_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE TipoLancamento
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Nome varchar(50) NOT NULL,
+	NomeFonema varchar(50) NOT NULL,
+	Sigla varchar(10) NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT TipoLancamentoId PRIMARY KEY (Id),
+	CONSTRAINT TipoLancamento_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT TipoLancamento_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE OperacaoEstoque
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Nome varchar(20) NOT NULL,
+	NomeFonema varchar(20) NOT NULL,
+	Descricao varchar(50) NOT NULL,
+	EntradaSaida varchar(3) DEFAULT 'AMB',
+	TipoSaida varchar(1) DEFAULT '2',
+	CalculaGiro BOOL DEFAULT FALSE,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT OperacaoEstoqueId PRIMARY KEY (Id),
+	CONSTRAINT OperacaoEstoque_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT OperacaoEstoque_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Tarefa
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Nome varchar(50) NOT NULL,
+	NomeFonema varchar(50) NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT TarefaId PRIMARY KEY (Id),
+	CONSTRAINT Tarefa_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT Tarefa_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE TipoOcupado
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Nome varchar(50) NOT NULL,
+	NomeFonema varchar(50) NOT NULL,
+	Sigla varchar(10) NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT TipoOcupadoId PRIMARY KEY (Id),
+	CONSTRAINT TipoOcupado_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT TipoOcupado_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Orgao
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Nome varchar(50) NOT NULL,
+	NomeFonema varchar(50) NOT NULL,
+	Sigla varchar(10) NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT OrgaoId PRIMARY KEY (Id),
+	CONSTRAINT Orgao_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Orgao_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Cargo
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	OrgaoId INT DEFAULT NULL,
+	Nome varchar(50) NOT NULL,
+	NomeFonema varchar(50) NOT NULL,
+	Sigla varchar(10) NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT CargoId PRIMARY KEY (Id),
+	CONSTRAINT Cargo_OrgaoId FOREIGN KEY (OrgaoId) REFERENCES Cargo (Id) ON UPDATE CASCADE ,
+	CONSTRAINT Cargo_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT Cargo_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Regiao
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Nome varchar(50) NOT NULL,
+	NomeFonema varchar(50) NOT NULL,
+	Sigla varchar(10) NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT RegiaoId PRIMARY KEY (Id),
+	CONSTRAINT Regiao_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Regiao_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Especialidade
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	OrgaoId INT NOT NULL,
+	Nome varchar(50) NOT NULL,
+	NomeFonema varchar(50) NOT NULL,
+	Sigla varchar(10) NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT EspecialidadeId PRIMARY KEY (Id),
+	CONSTRAINT Especialidade_OragaoId FOREIGN KEY (OrgaoId) REFERENCES Orgao (Id) ON UPDATE CASCADE ,
+	CONSTRAINT Especialidade_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT Especialidade_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE EstadoCivil
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Nome varchar(50) NOT NULL,
+	NomeFonema varchar(50) NOT NULL,
+	Sigla varchar(10) NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT EstadoCivilId PRIMARY KEY (Id),
+	CONSTRAINT EstadoCivil_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT EstadoCivil_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE GrupoPrograma
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Nome varchar(20) NOT NULL,
+	NomeFonema varchar(20) NOT NULL,
+	Sigla varchar(10) NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT GrupoProgramaId PRIMARY KEY (Id),
+	CONSTRAINT GrupoPrograma_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT GrupoPrograma_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Versao
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Numero varchar(10) NOT NULL,
+	Revisao varchar(10) NOT NULL,
+	Data TIMESTAMP NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT VersaoId PRIMARY KEY (Id),
+	CONSTRAINT Versao_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Versao_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Prontuario
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ClienteId INT NOT NULL,
+	ProfissionalId INT NOT NULL,
+	Data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	HoraInicio TIMESTAMP NOT NULL,
+	HoraFinal TIMESTAMP NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT ProntuarioId PRIMARY KEY (Id),
+	CONSTRAINT Prontuario_ClienteId FOREIGN KEY (ClienteId) REFERENCES Cliente (Id) ON UPDATE CASCADE,
+	CONSTRAINT Prontuario_ProfissionalId FOREIGN KEY (ProfissionalId) REFERENCES Profissional (Id) ON UPDATE CASCADE ,
+	CONSTRAINT Prontuario_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Prontuario_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Fornecedor
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	PessoaId INT NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT FornecedorId PRIMARY KEY (Id),
+	CONSTRAINT Fornecedor_PessoaId FOREIGN KEY (PessoaId) REFERENCES Pessoa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Fornecedor_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Fornecedor_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Atividade
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ProfissionalId INT DEFAULT NULL,
+	ServicoId INT DEFAULT NULL,
+	ModeloId INT DEFAULT NULL,
+	ContaADMId INT DEFAULT NULL,
+	PodeAgendar BOOL DEFAULT FALSE,
+	TempoExecucao INT DEFAULT 0,
+	Tipo varchar(3) DEFAULT 'CMS',
+	Comissao FLOAT DEFAULT 0,
+	Valor FLOAT DEFAULT 0,
+	TipoTabela varchar(3) DEFAULT 'PFS',
+	ValorServico FLOAT DEFAULT 0,
+	DescontoProduto varchar(3) DEFAULT 'PSB',
+	IncluiAPP BOOL DEFAULT FALSE,
+	SimultaneoAPP INT DEFAULT 1,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT AtividadeId PRIMARY KEY (Id),
+	CONSTRAINT Atividade_modeloId FOREIGN KEY (ModeloId) REFERENCES Modelo (Id) ON UPDATE CASCADE,
+	CONSTRAINT Atividade_ServicoId FOREIGN KEY (ServicoId) REFERENCES Servico (Id) ON UPDATE CASCADE,
+	CONSTRAINT Atividade_ContaADMId FOREIGN KEY (ContaADMId) REFERENCES ContaADM (Id) ON UPDATE CASCADE,
+	CONSTRAINT Atividade_ProfissionalId FOREIGN KEY (ProfissionalId) REFERENCES Profissional (Id) ON UPDATE CASCADE,
+	CONSTRAINT Atividade_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Atividade_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Composicao
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	AtividadeId INT DEFAULT NULL,
+	ServicoId INT DEFAULT NULL,
+	Tipo varchar(3) DEFAULT NULL,
+	Valor FLOAT DEFAULT NULL,
+	BaseValor varchar(3) DEFAULT NULL,
+	DescontaEmpresa BOOL DEFAULT FALSE,
+	DescontaProfissional BOOL DEFAULT FALSE,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT ComposicaoId PRIMARY KEY (Id),
+	CONSTRAINT Composicao_AtividadeId FOREIGN KEY (AtividadeId) REFERENCES Atividade (Id) ON UPDATE CASCADE,
+	CONSTRAINT Composicao_ServicoId FOREIGN KEY (ServicoId) REFERENCES Servico (Id) ON UPDATE CASCADE,
+	CONSTRAINT Composicao_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT Composicao_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Item
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	GrupoItemId INT DEFAULT NULL,
+	FornecedorId INT DEFAULT NULL,
+	Codigo INT NOT NULL,
+	CodigoBarra varchar(15) NOT NULL,
+	Descricao varchar(50) NOT NULL,
+	DescricaoFonema varchar(50) NOT NULL,
+	DescricaoReduzida varchar(30) NOT NULL,
+	DescricaoReduzidaFonema varchar(30) NOT NULL,
+	UnidadeCompra varchar(6) NOT NULL,
+	UnidadeVenda varchar(6) NOT NULL,
+	UnidadeConsumo varchar(6) NOT NULL,
+	ConversaoVenda INT NOT NULL,
+	ConversaoConsumo INT NOT NULL,
+	TipoUso varchar(1) NOT NULL,
+	ValorVenda FLOAT DEFAULT NULL,
+	ValorCusto FLOAT DEFAULT NULL,
+	ValorSubsidiado FLOAT DEFAULT NULL,
+	ValorCustoMedio FLOAT DEFAULT NULL,
+	EstoqueMinimoCompra FLOAT NOT NULL,
+	EstoqueMinimoVenda FLOAT NOT NULL,
+	EstoqueMinimoConsumo FLOAT NOT NULL,
+	ListaPreco BOOL DEFAULT NULL,
+	Observacao TEXT ,
+	Status varchar(1) NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT ItemId PRIMARY KEY (Id),
+	CONSTRAINT Item_GrupoItemId FOREIGN KEY (GrupoItemId) REFERENCES GrupoItem (Id) ON UPDATE CASCADE,
+	CONSTRAINT Item_FornecedorId FOREIGN KEY (FornecedorId) REFERENCES Fornecedor (Id) ON UPDATE CASCADE,
+	CONSTRAINT Item_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Item_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+;CREATE INDEX Item_Codigo_KEY ON Item (Codigo)
+;CREATE INDEX Item_Descricao_KEY ON Item (Descricao)
+;CREATE INDEX Item_DescricaoReduzida_KEY ON Item (DescricaoReduzida)
+;CREATE INDEX Item_CodigoBarra_KEY ON Item (CodigoBarra)
+
+;create TABLE Foto
+	(
+	Id SERIAL,
+	PessoaId INT DEFAULT NULL,
+	Tipo varchar(3) NOT NULL,
+	UrlImagem varchar(200) NOT NULL,
+	Titulo varchar(50) DEFAULT NULL,
+	TituloFonema varchar(50) DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT FotoId PRIMARY KEY (Id)
+	)
+
+;create TABLE ConvenioValor
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ConvenioId INT DEFAULT NULL,
+	ServicoId INT DEFAULT NULL,
+	Valor FLOAT DEFAULT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT ConvenioValorId PRIMARY KEY (Id),
+	CONSTRAINT ConvenioValor_ServicoId FOREIGN KEY (ServicoId) REFERENCES Servico (Id) ON UPDATE CASCADE,
+	CONSTRAINT ConvenioValor_ConvenioId FOREIGN KEY (ConvenioId) REFERENCES Convenio (Id) ON UPDATE CASCADE,
+	CONSTRAINT ConvenioValor_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT ConvenioValor_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Titulo
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	FornecedorId INT DEFAULT NULL,
+	Numero varchar(20) NOT NULL,
+	Desdobramento varchar(10) NOT NULL,
+	DataEmissao TIMESTAMP NOT NULL,
+	DataVencimento TIMESTAMP NOT NULL,
+	DataUltimoPagamento TIMESTAMP NOT NULL,
+	Valor FLOAT DEFAULT NULL,
+	ValorPago FLOAT DEFAULT NULL,
+	ValorDesconto FLOAT DEFAULT NULL,
+	Status varchar(1) DEFAULT '0',
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT TituloId PRIMARY KEY (Id),
+	CONSTRAINT Titulo_FornecedorId FOREIGN KEY (FornecedorId) REFERENCES Fornecedor (Id) ON UPDATE CASCADE,
+	CONSTRAINT Titulo_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Titulo_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE ProfissionalGrupoProfissional
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ProfissionalId INT DEFAULT NULL,
+	GrupoProfissionalId INT DEFAULT NULL,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT ProfissionalGrupoProfissionalId PRIMARY KEY (Id),
+	CONSTRAINT ProfissionalGrupoProfissional_GrupoProfissionalId FOREIGN KEY (GrupoProfissionalId) REFERENCES GrupoProfissional (Id) ON UPDATE CASCADE,
+	CONSTRAINT ProfissionalGrupoProfissional_ProfissionalId FOREIGN KEY (ProfissionalId) REFERENCES Profissional (Id) ON UPDATE CASCADE,
+	CONSTRAINT ProfissionalGrupoProfissional_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT ProfissionalGrupoProfissional_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE ServicoGrupoServico
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ServicoId INT DEFAULT NULL,
+	GrupoServicoId INT DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	Observacao TEXT ,
+	CONSTRAINT ServicoGrupoServicoId PRIMARY KEY (Id),
+	CONSTRAINT ServicoGrupoServico_GrupoServicoId FOREIGN KEY (GrupoServicoId) REFERENCES GrupoServico (Id) ON UPDATE CASCADE,
+	CONSTRAINT ServicoGrupoServico_ServicoId FOREIGN KEY (ServicoId) REFERENCES Servico (Id) ON UPDATE CASCADE,
+	CONSTRAINT ServicoGrupoServico_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT ServicoGrupoServico_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE SalaServico
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	SalaId INT DEFAULT NULL,
+	ServicoId INT DEFAULT NULL,
+	Tempo INT NOT NULL,
+	TempoIntervalo INT NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	Observacao TEXT ,
+	CONSTRAINT SalaServicoId PRIMARY KEY (Id),
+	CONSTRAINT SalaServico_ServicoId FOREIGN KEY (ServicoId) REFERENCES Servico (Id) ON UPDATE CASCADE,
+	CONSTRAINT SalaServico_SalaId FOREIGN KEY (SalaId) REFERENCES Sala (Id) ON UPDATE CASCADE,
+	CONSTRAINT SalaServico_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT SalaServico_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE SalaRecurso
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	SalaId INT DEFAULT NULL,
+	RecursoId INT DEFAULT NULL,
+	Ordem INT NOT NULL,
+	Quantidade FLOAT NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT SalaRecursoId PRIMARY KEY (Id),
+	CONSTRAINT SalaRecurso_RecursoId FOREIGN KEY (RecursoId) REFERENCES Recurso (Id) ON UPDATE CASCADE,
+	CONSTRAINT SalaRecurso_SalaId FOREIGN KEY (SalaId) REFERENCES Sala (Id) ON UPDATE CASCADE,
+	CONSTRAINT SalaRecurso_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT SalaRecurso_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Demanda
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ProfissionalId INT DEFAULT NULL,
+	ServicoId INT DEFAULT NULL,
+	ClienteId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT DemandaId PRIMARY KEY (Id),
+	CONSTRAINT Demanda_ClienteId FOREIGN KEY (ClienteId) REFERENCES Cliente (Id) ON UPDATE CASCADE,
+	CONSTRAINT Demanda_ServicoId FOREIGN KEY (ServicoId) REFERENCES Servico (Id) ON UPDATE CASCADE,
+	CONSTRAINT Demanda_ProfissionalId FOREIGN KEY (ProfissionalId) REFERENCES Profissional (Id) ON UPDATE CASCADE,
+	CONSTRAINT Demanda_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Demanda_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE DiaProfissional
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ProfissionalId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL,
+	Tipo varchar(1) DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT DiaProfissionalId PRIMARY KEY (Id),
+	CONSTRAINT DiaProfissional_ProfissionalId FOREIGN KEY (ProfissionalId) REFERENCES Profissional (Id) ON UPDATE CASCADE,
+	CONSTRAINT DiaProfissional_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT DiaProfissional_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE EscalaProfissional
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ProfissionalId INT DEFAULT NULL,
+	HorarioId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL,
+	Tipo varchar(1) DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT EscalaProfissionalId PRIMARY KEY (Id),
+	CONSTRAINT EscalaProfissional_HorarioId FOREIGN KEY (HorarioId) REFERENCES Horario (Id) ON UPDATE CASCADE,
+	CONSTRAINT EscalaProfissional_ProfissionalId FOREIGN KEY (ProfissionalId) REFERENCES Profissional (Id) ON UPDATE CASCADE,
+	CONSTRAINT EscalaProfissional_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT EscalaProfissional_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE EstruturaFicha
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ServicoId INT DEFAULT NULL,
+	Posicao INT NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT EstruturaFichaId PRIMARY KEY (Id),
+	CONSTRAINT EstruturaFicha_ServicoId FOREIGN KEY (ServicoId) REFERENCES Servico (Id) ON UPDATE CASCADE,
+	CONSTRAINT EstruturaFicha_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT EstruturaFicha_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE EstruturaServico
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ServicoId INT DEFAULT NULL,
+	ItemId INT DEFAULT NULL,
+	ServicoEstruturaId INT DEFAULT NULL,
+	Posicao INT NOT NULL,
+	Quantidade FLOAT DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT EstruturaServicoId PRIMARY KEY (Id),
+	CONSTRAINT EstruturaServico_ItemId FOREIGN KEY (ItemId) REFERENCES Item (Id) ON UPDATE CASCADE,
+	CONSTRAINT EstruturaServico_ServicoEstruturaId FOREIGN KEY (ServicoEstruturaId) REFERENCES Servico (Id) ON UPDATE CASCADE,
+	CONSTRAINT EstruturaServico_ServicoId FOREIGN KEY (ServicoId) REFERENCES Servico (Id) ON UPDATE CASCADE,
+	CONSTRAINT EstruturaServico_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT EstruturaServico_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE FornecedorItem
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	FornecedorId INT DEFAULT NULL,
+	ItemId INT DEFAULT NULL,
+	Valor FLOAT DEFAULT NULL,
+	Validade TIMESTAMP NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT FornecedorItemId PRIMARY KEY (Id),
+	CONSTRAINT FornecedorItem_FornecedorId FOREIGN KEY (FornecedorId) REFERENCES Fornecedor (Id) ON UPDATE CASCADE,
+	CONSTRAINT FornecedorItem_ItemId FOREIGN KEY (ItemId) REFERENCES Item (Id) ON UPDATE CASCADE,
+	CONSTRAINT FornecedorItem_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT FornecedorItem_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Meta
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Quem varchar(30) NOT NULL,
+	QuemId INT NOT NULL,
+	Oque varchar(50) NOT NULL,
+	MesAno varchar(10) NOT NULL,
+	QuantidadePrevista FLOAT NOT NULL,
+	ValorPrevisto FLOAT NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT MetaId PRIMARY KEY (Id),
+	CONSTRAINT Meta_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Meta_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE CustoMedio
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ItemId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL,
+	Valor FLOAT DEFAULT NULL,
+	ValorICM FLOAT DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT CustoMedioId PRIMARY KEY (Id),
+	CONSTRAINT CustoMedio_ItemId FOREIGN KEY (ItemId) REFERENCES Item (Id) ON UPDATE CASCADE ,
+	CONSTRAINT CustoMedio_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT CustoMedio_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Ocorrencia
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ProfissionalId INT NOT NULL,
+	Data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT OcorrenciaId PRIMARY KEY (Id),
+	CONSTRAINT Ocorrencia_ProfissionalId FOREIGN KEY (ProfissionalId) REFERENCES Profissional (Id) ON UPDATE CASCADE,
+	CONSTRAINT Ocorrencia_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Ocorrencia_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Pedido
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	FornecedorId INT DEFAULT NULL,
+	Numero INT NOT NULL,
+	DataEmissao TIMESTAMP NOT NULL,
+	DataPrevistaEntrega TIMESTAMP NOT NULL,
+	Valor FLOAT DEFAULT NULL,
+	Responsavel varchar(50) NOT NULL,
+	ResponsavelFonema varchar(50) NOT NULL,
+	Observacao TEXT ,
+	Status varchar(1) DEFAULT '0',
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT PedidoId PRIMARY KEY (Id),
+	CONSTRAINT Pedido_FornecedorId FOREIGN KEY (FornecedorId) REFERENCES Fornecedor (Id) ON UPDATE CASCADE,
+	CONSTRAINT Pedido_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Pedido_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE PedidoItem
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	PedidoId INT DEFAULT NULL,
+	ItemId INT DEFAULT NULL,
+	Ordem INT NOT NULL,
+	Quantidade FLOAT DEFAULT NULL,
+	Valor FLOAT DEFAULT NULL,
+	Observacao TEXT ,
+	Status varchar(1) DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT PedidoItemId PRIMARY KEY (Id),
+	CONSTRAINT PedidoItem_PedidoId FOREIGN KEY (PedidoId) REFERENCES Pedido (Id) ON UPDATE CASCADE,
+	CONSTRAINT PedidoItem_ItemId FOREIGN KEY (ItemId) REFERENCES Item (Id) ON UPDATE CASCADE ,
+	CONSTRAINT PedidoItem_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT PedidoItem_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Perfil
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ProfissionalId INT DEFAULT NULL,
+	CartaoId INT DEFAULT NULL,
+	GrupoItemId INT NOT NULL,
+	Tipo varchar(20) NOT NULL,
+	Valor FLOAT DEFAULT NULL,
+	SimNao BOOL DEFAULT NULL,
+	Dia INT NOT NULL,
+	PrimeiroVencimento INT NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	Observacao TEXT ,
+	CONSTRAINT PerfilId PRIMARY KEY (Id),
+	CONSTRAINT Perfil_ProfissionalId FOREIGN KEY (ProfissionalId) REFERENCES Profissional (Id) ON UPDATE CASCADE,
+	CONSTRAINT Perfil_GrupoItemId FOREIGN KEY (GrupoItemId) REFERENCES GrupoItem (Id) ON UPDATE CASCADE,
+	CONSTRAINT Perfil_cartaoId FOREIGN KEY (CartaoId) REFERENCES Cartao (Id) ON UPDATE CASCADE ,
+	CONSTRAINT Perfil_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Perfil_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Permissao
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ProfissionalId INT DEFAULT NULL,
+	ProcessoId INT DEFAULT NULL,
+	ModeloId INT DEFAULT NULL,
+	Validade TIMESTAMP NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT PermissaoId PRIMARY KEY (Id),
+	CONSTRAINT Permissao_ProfissionalId FOREIGN KEY (ProfissionalId) REFERENCES Profissional (Id) ON UPDATE CASCADE,
+	CONSTRAINT Permissao_ModeloId FOREIGN KEY (ModeloId) REFERENCES Profissional (Id) ON UPDATE CASCADE,
+	CONSTRAINT Permissao_ProcessoId FOREIGN KEY (ProcessoId) REFERENCES Processo (Id) ON UPDATE CASCADE ,
+	CONSTRAINT Permissao_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Permissao_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Promocao
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Sigla varchar(10) NOT NULL,
+	Descricao varchar(50) NOT NULL,
+	DataInicio TIMESTAMP NOT NULL,
+	DataFinal TIMESTAMP NOT NULL,
+	TotalPontos FLOAT DEFAULT NULL,
+	PontosPremio FLOAT DEFAULT NULL,
+	TipoAcumula varchar(1) DEFAULT NULL,
+	ValidadePonto INT DEFAULT NULL,
+	ValorPonto FLOAT DEFAULT NULL,
+	TipoPagamentoPremio varchar(1) DEFAULT 'P',
+	PercentualDescontoPremio FLOAT DEFAULT NULL,
+	ComissaoPremio varchar(1) DEFAULT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT PromocaoId PRIMARY KEY (Id),
+	CONSTRAINT Promocao_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Promocao_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE PromocaoHorario
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	PromocaoId INT DEFAULT NULL,
+	HorarioId INT DEFAULT NULL ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT PromocaoHorarioId PRIMARY KEY (Id),
+	CONSTRAINT PromocaoHorario_PromocaoId FOREIGN KEY (PromocaoId) REFERENCES Promocao (Id) ON UPDATE CASCADE,
+	CONSTRAINT PromocaoHorario_HorarioId FOREIGN KEY (HorarioId) REFERENCES Horario (Id) ON UPDATE CASCADE,
+	CONSTRAINT PromocaoHorario_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT PromocaoHorario_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE PromocaoServico
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	PromocaoId INT DEFAULT NULL,
+	ServicoId INT DEFAULT NULL,
+	Pontos FLOAT NOT NULL,
+	EPromocao BOOL DEFAULT NULL,
+	PodeResgatar BOOL DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT PromocaoServicoId PRIMARY KEY (Id),
+	CONSTRAINT PromocaoServico_PromocaoId FOREIGN KEY (PromocaoId) REFERENCES Promocao (Id) ON UPDATE CASCADE,
+	CONSTRAINT PromocaoServico_ServicoId FOREIGN KEY (ServicoId) REFERENCES Servico (Id) ON UPDATE CASCADE ,
+	CONSTRAINT PromocaoServico_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT PromocaoServico_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE PromocaoCliente
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	PromocaoId INT DEFAULT NULL,
+	ClienteId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL,
+	PontosInicial FLOAT NOT NULL,
+	PontosTotal FLOAT NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT PromocaoClienteId PRIMARY KEY (Id),
+	CONSTRAINT PromocaoCliente_PromocaoId FOREIGN KEY (PromocaoId) REFERENCES Promocao (Id) ON UPDATE CASCADE,
+	CONSTRAINT PromocaoCliente_ClienteId FOREIGN KEY (ClienteId) REFERENCES Cliente (Id) ON UPDATE CASCADE ,
+	CONSTRAINT PromocaoCliente_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT PromocaoCliente_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE TituloContaADM
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	TituloId INT DEFAULT NULL,
+	ContaADMId INT DEFAULT NULL,
+	Valor FLOAT DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT TituloContaADMId PRIMARY KEY (Id),
+	CONSTRAINT TituloContaADM_ContaADMId FOREIGN KEY (ContaADMId) REFERENCES ContaADM (Id) ON UPDATE CASCADE,
+	CONSTRAINT TituloContaADM_TituloId FOREIGN KEY (TituloId) REFERENCES Titulo (Id) ON UPDATE CASCADE ,
+	CONSTRAINT TituloContaADM_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT TituloContaADM_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE SaldoProfissional
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ProfissionalId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL,
+	Valor FLOAT NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT SaldoProfissionalId PRIMARY KEY (Id),
+	CONSTRAINT SaldoProfissional_ProfissionalId FOREIGN KEY (ProfissionalId) REFERENCES Profissional (Id) ON UPDATE CASCADE ,
+	CONSTRAINT SaldoProfissional_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT SaldoProfissional_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE SaldoItem
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ItemId INT DEFAULT NULL,
+	LocalEstoqueId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL,
+	Valor FLOAT NOT NULL,
+	Quantidade FLOAT NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT SaldoItemId PRIMARY KEY (Id),
+	CONSTRAINT SaldoItem_LocalEstoqueId FOREIGN KEY (LocalEstoqueId) REFERENCES LocalEstoque (Id) ON UPDATE CASCADE,
+	CONSTRAINT SaldoItem_ItemId FOREIGN KEY (ItemId) REFERENCES Item (Id) ON UPDATE CASCADE ,
+	CONSTRAINT SaldoItem_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT SaldoItem_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE SaldoContaADM
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ContaADMId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL,
+	Valor FLOAT NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT SaldoContaADMId PRIMARY KEY (Id),
+	CONSTRAINT SaldoContaADM_ContaADMId FOREIGN KEY (ContaADMId) REFERENCES ContaADM (Id) ON UPDATE CASCADE ,
+	CONSTRAINT SaldoContaADM_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT SaldoContaADM_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE SaldoContaBancaria
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ContaBancariaId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL,
+	Valor FLOAT NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT SaldoContaBancariaId PRIMARY KEY (Id),
+	CONSTRAINT SaldoBanco_ContaBancariaId FOREIGN KEY (ContaBancariaId) REFERENCES ContaBancaria (Id) ON UPDATE CASCADE ,
+	CONSTRAINT SaldoBanco_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT SaldoBanco_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE SaldoContaLivroCaixa
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ContaLivroCaixaId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL,
+	Valor FLOAT NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT SaldoContaLivroCaixaId PRIMARY KEY (Id),
+	CONSTRAINT SaldoLivroCaixa_ContaLivroCaixaId FOREIGN KEY (ContaLivroCaixaId) REFERENCES ContaLivroCaixa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT SaldoLivroCaixa_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT SaldoLivroCaixa_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE SaldoCartao
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	CartaoId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL,
+	Valor FLOAT NOT NULL,
+	ValorLiquido FLOAT NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT SaldoCartaoId PRIMARY KEY (Id),
+	CONSTRAINT SaldoCartao_CartaoId FOREIGN KEY (CartaoId) REFERENCES Cartao (Id) ON UPDATE CASCADE ,
+	CONSTRAINT SaldoCartao_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT SaldoCartao_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE SaldoCliente
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ClienteId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL,
+	Valor FLOAT NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT SaldoClienteId PRIMARY KEY (Id),
+	CONSTRAINT SaldoCliente_ClienteId FOREIGN KEY (ClienteId) REFERENCES Cliente (Id) ON UPDATE CASCADE ,
+	CONSTRAINT SaldoCliente_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT SaldoCliente_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE RPSGerada
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	InscricaoMunicipal varchar(12) NOT NULL,
+	DataInicial TIMESTAMP NOT NULL,
+	DataFinal TIMESTAMP NOT NULL,
+	Tipo varchar(5) NOT NULL,
+	Serie varchar(5) NOT NULL,
+	Numero varchar(12) NOT NULL,
+	DataEmissao TIMESTAMP NOT NULL,
+	Situacao varchar(1) NOT NULL,
+	ValorServico FLOAT DEFAULT NULL,
+	ValorDeducao FLOAT DEFAULT NULL,
+	CodigoServico varchar(5) NOT NULL,
+	Aliquota varchar(4) NOT NULL,
+	ISSRetido varchar(1) NOT NULL,
+	FisicaJuridica varchar(1) NOT NULL,
+	CPFCNPJ varchar(14) NOT NULL,
+	InscricaoMunicipalTomador varchar(8) NOT NULL,
+	RazaoSocialTomador varchar(75) NOT NULL,
+	EmailTomador varchar(30) NOT NULL,
+	DescriminacaoServico TEXT,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT RPSGeradaId PRIMARY KEY (Id),
+	CONSTRAINT RPSGerada_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT RPSGerada_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Recado
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ProfissionalOrigemId INT NOT NULL,
+	ProfissionalDestinoId INT NOT NULL,
+	Data TIMESTAMP NOT NULL,
+	Assunto varchar(50) NOT NULL,
+	Observacao TEXT,
+	Tipo INT NOT NULL,
+	Lido INT NOT NULL,
+	DataLeitura TIMESTAMP DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT RecadoId PRIMARY KEY (Id),
+	CONSTRAINT Recado_ProfissionalOrigemId FOREIGN KEY (ProfissionalOrigemId) REFERENCES Profissional (Id) ON UPDATE CASCADE,
+	CONSTRAINT Recado_ProfissionalDestinoId FOREIGN KEY (ProfissionalDestinoId) REFERENCES Profissional (Id) ON UPDATE CASCADE ,
+	CONSTRAINT Recado_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Recado_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Ficha
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ClienteId INT DEFAULT NULL,
+	ClientePagamentoId INT DEFAULT NULL,
+	ClienteIndicacaoId INT DEFAULT NULL,
+	ConvenioId INT DEFAULT NULL,
+	CaixaId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	Tipo varchar(1) DEFAULT 'E',
+	Situacao varchar(1) DEFAULT '0',
+	StatusGeral INT DEFAULT '0',
+	StatusPago INT DEFAULT '0',
+	StatusPreDatado INT DEFAULT '0',
+	StatusPendente INT DEFAULT '0',
+	ValorServico FLOAT DEFAULT NULL,
+	ValorProduto FLOAT DEFAULT NULL,
+	ValorPago FLOAT DEFAULT NULL,
+	ValorPreDatado FLOAT DEFAULT NULL,
+	ValorPendente FLOAT DEFAULT NULL,
+	DataPrevista TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CartaoFicha INT DEFAULT NULL,
+	Saida TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	NFESerie varchar(6) DEFAULT NULL,
+	NFENumero varchar(6) DEFAULT NULL,
+	RPSSerie varchar(6) DEFAULT NULL,
+	RPSNumero varchar(6) DEFAULT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT FichaId PRIMARY KEY (Id),
+	CONSTRAINT Ficha_ConvenioId FOREIGN KEY (ConvenioId) REFERENCES Convenio (Id) ON UPDATE CASCADE,
+	CONSTRAINT Ficha_ClienteId FOREIGN KEY (ClienteId) REFERENCES Cliente (Id) ON UPDATE CASCADE,
+	CONSTRAINT Ficha_ClientePagamentoId FOREIGN KEY (ClientePagamentoId) REFERENCES Cliente (Id) ON UPDATE CASCADE,
+	CONSTRAINT Ficha_ClienteIndicacaoId FOREIGN KEY (ClienteIndicacaoId) REFERENCES Cliente (Id) ON UPDATE CASCADE,
+	CONSTRAINT Ficha_CaixaId FOREIGN KEY (CaixaId) REFERENCES Profissional (Id) ON UPDATE CASCADE ,
+	CONSTRAINT Ficha_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Ficha_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE FichaAcumulada
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	Ficha01Id INT NOT NULL,
+	Ficha02Id INT NOT NULL ,
+	CONSTRAINT FichaAcumuladaId PRIMARY KEY (Id),
+	CONSTRAINT FichaAcumulada_Ficha01Id FOREIGN KEY (Ficha01Id) REFERENCES Ficha (Id) ON UPDATE CASCADE,
+	CONSTRAINT FichaAcumulada_Ficha02Id FOREIGN KEY (Ficha02Id) REFERENCES Ficha (Id) ON UPDATE CASCADE ,
+	CONSTRAINT FichaAcumulada_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT FichaAcumulada_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Orcamento
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ClienteId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	Valor FLOAT NOT NULL,
+	Validade TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT OrcamentoId PRIMARY KEY (Id),
+	CONSTRAINT Orcamento_ClienteId FOREIGN KEY (ClienteId) REFERENCES Cliente (Id) ON UPDATE CASCADE ,
+	CONSTRAINT Orcamento_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Orcamento_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE HistoricoCliente
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ClienteId INT DEFAULT NULL,
+	ProfissionalId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT HistoricoClienteId PRIMARY KEY (Id),
+	CONSTRAINT HistoricoCliente_ClienteId FOREIGN KEY (ClienteId) REFERENCES Cliente (Id) ON UPDATE CASCADE,
+	CONSTRAINT HistoricoCliente_ProfissionalId FOREIGN KEY (ProfissionalId) REFERENCES Profissional (Id) ON UPDATE CASCADE ,
+	CONSTRAINT HistoricoCliente_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT HistoricoCliente_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE HistoricoClienteFoto
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	HistoricoClienteId INT DEFAULT NULL,
+	FotoId INT DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	Observacao TEXT ,
+	CONSTRAINT HistoricoClienteFotoId PRIMARY KEY (Id),
+	CONSTRAINT HistoricoClienteFoto_HistoricoClienteId FOREIGN KEY (HistoricoClienteId) REFERENCES HistoricoCliente (Id) ON UPDATE CASCADE,
+	CONSTRAINT HistoricoClienteFoto_FotoId FOREIGN KEY (FotoId) REFERENCES Foto (Id) ON UPDATE CASCADE ,
+	CONSTRAINT HistoricoClienteFoto_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT HistoricoClienteFoto_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE NotaEntrada
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	FornecedorId INT DEFAULT NULL,
+	Serie varchar(10) NOT NULL,
+	Numero varchar(10) NOT NULL,
+	DataRecebimento TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	DataEmissao TIMESTAMP NOT NULL,
+	Valor FLOAT DEFAULT NULL,
+	ValorDesconto FLOAT DEFAULT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT NotaEntradaId PRIMARY KEY (Id),
+	CONSTRAINT NotaEntrada_FornecedorId FOREIGN KEY (FornecedorId) REFERENCES Fornecedor (Id) ON UPDATE CASCADE ,
+	CONSTRAINT NotaEntrada_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT NotaEntrada_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE NotaEntradaItem
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	FornecedorId INT NOT NULL,
+	NotaEntradaId INT DEFAULT NULL,
+	LocalEstoqueId INT DEFAULT NULL,
+	ItemId INT DEFAULT NULL,
+	OperacaoEstoqueId INT DEFAULT NULL,
+	Ordem INT DEFAULT NULL,
+	Quantidade FLOAT DEFAULT NULL,
+	Valor FLOAT DEFAULT NULL,
+	AliquotaICM FLOAT DEFAULT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT NotaEntradaItemId PRIMARY KEY (Id),
+	CONSTRAINT NotaEntradaItem_FornecedorId FOREIGN KEY (FornecedorId) REFERENCES Fornecedor (Id) ON UPDATE CASCADE,
+	CONSTRAINT NotaEntradaItem_LocalEstoqueId FOREIGN KEY (LocalEstoqueId) REFERENCES LocalEstoque (Id) ON UPDATE CASCADE,
+	CONSTRAINT NotaEntradaItem_ItemId FOREIGN KEY (ItemId) REFERENCES Item (Id) ON UPDATE CASCADE ,
+	CONSTRAINT NotaEntradaItem_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT NotaEntradaItem_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE MovimentoFicha
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	FichaId INT DEFAULT NULL,
+	ProfissionalId INT DEFAULT NULL,
+	ServicoId INT DEFAULT NULL,
+	ServicoPaiId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL,
+	Valor FLOAT NOT NULL,
+	DebCred varchar(1) NOT NULL,
+	Status INT DEFAULT '0',
+	HoraInicio TIMESTAMP NOT NULL,
+	HoraFim TIMESTAMP NOT NULL,
+	Ordem INT NOT NULL,
+	Liberado BOOL DEFAULT TRUE,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT MovimentoFichaId PRIMARY KEY (Id),
+	CONSTRAINT MovimentoFicha_ProfissionalId FOREIGN KEY (ProfissionalId) REFERENCES Profissional (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoFicha_ServicoId FOREIGN KEY (ServicoId) REFERENCES Servico (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoFicha_ServicoPaiId 	 FOREIGN KEY (ServicoPaiId) 	 REFERENCES MovimentoFicha (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoFicha_FichaId FOREIGN KEY (FichaId) REFERENCES Ficha (Id) ON UPDATE CASCADE ,
+	CONSTRAINT MovimentoFicha_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoFicha_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE MovimentoEstoque
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ItemId INT DEFAULT NULL,
+	LocalEstoqueId INT DEFAULT NULL,
+	OperacaoEstoqueId INT DEFAULT NULL,
+	NotaEntradaItemId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL,
+	Valor FLOAT NOT NULL,
+	Quantidade FLOAT NOT NULL,
+	ValorCustoMedio FLOAT NOT NULL,
+	ValorICM FLOAT NOT NULL,
+	DebCred varchar(1) NOT NULL,
+	Status INT DEFAULT '0',
+	RecalculaCustoMedio BOOL DEFAULT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT MovimentoEstoqueId PRIMARY KEY (Id),
+	CONSTRAINT MovimentoEstoque_ItemId FOREIGN KEY (ItemId) REFERENCES Item (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoEstoque_LocalEstoqueId FOREIGN KEY (LocalEstoqueId) REFERENCES LocalEstoque (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoEstoque_OperacaoEstoqueId FOREIGN KEY (OperacaoEstoqueId) REFERENCES OperacaoEstoque (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoEstoque_NotaEntradaItemId FOREIGN KEY (NotaEntradaItemId) REFERENCES NotaEntradaItem (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoEstoque_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoEstoque_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE MovimentoEstoqueMovimentoFicha
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	MovimentoFichaId INT DEFAULT NULL,
+	MovimentoEstoqueId INT DEFAULT NULL,
+	CONSTRAINT MovimentoEstoqueMovimentoFichaId PRIMARY KEY (Id),
+	CONSTRAINT MovimentoEstoqueMovimentoFicha_MovimentoEstoqueId FOREIGN KEY (MovimentoEstoqueId) REFERENCES MovimentoEstoque (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoEstoqueMovimentoFicha_MovimentoFichaId FOREIGN KEY (MovimentoFichaId) REFERENCES MovimentoFicha (Id) ON UPDATE CASCADE ,
+	CONSTRAINT MovimentoEstoqueMovimentoFicha_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoEstoqueMovimentoFicha_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE MovimentoCartao
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	CartaoId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL,
+	Valor FLOAT NOT NULL,
+	ValorLiquido FLOAT NOT NULL,
+	Taxa FLOAT NOT NULL,
+	DebCred varchar(1) NOT NULL,
+	Status INT DEFAULT '0',
+	Antecipado BOOL DEFAULT NULL,
+	DataLancamento TIMESTAMP NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT MovimentoCartaoId PRIMARY KEY (Id),
+	CONSTRAINT MovimentoCartao_CartaoId FOREIGN KEY (CartaoId) REFERENCES Cartao (Id) ON UPDATE CASCADE ,
+	CONSTRAINT MovimentoCartao_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT MovimentoCartao_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE MovimentoContaADM
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ContaADMId INT DEFAULT NULL,
+	MovimentoFichaId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL,
+	Valor FLOAT NOT NULL,
+	DebCred varchar(1) NOT NULL,
+	Status INT DEFAULT '0',
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT MovimentoContaADMId PRIMARY KEY (Id),
+	CONSTRAINT MovimentoContaADM_ContaADMId FOREIGN KEY (ContaADMId) REFERENCES ContaADM (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoContaADM_MovimentoFichaId FOREIGN KEY (MovimentoFichaId) REFERENCES MovimentoFicha (Id) ON UPDATE CASCADE ,
+	CONSTRAINT MovimentoContaADM_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoContaADM_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Caixa
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ProfissionalId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL,
+	Abertura TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	Fechamento TIMESTAMP DEFAULT NULL,
+	ValorAbertura FLOAT NOT NULL,
+	TotalCreditos FLOAT NOT NULL,
+	TotalDebitos FLOAT NOT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT CaixaId PRIMARY KEY (Id),
+	CONSTRAINT Caixa_ProfissionalId FOREIGN KEY (ProfissionalId) REFERENCES Profissional (Id) ON UPDATE CASCADE ,
+	CONSTRAINT Caixa_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Caixa_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE DiferencaCaixa
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	CaixaId INT DEFAULT NULL,
+	TipoPagamentoId INT DEFAULT NULL,
+	Valor FLOAT NOT NULL,
+	Ordem INT NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT DiferencaCaixaId PRIMARY KEY (Id),
+	CONSTRAINT DiferencaCaixa_TipoPagamentoId FOREIGN KEY (TipoPagamentoId) REFERENCES TipoPagamento (Id) ON UPDATE CASCADE,
+	CONSTRAINT DiferencaCaixa_CaixaId FOREIGN KEY (CaixaId) REFERENCES Profissional (Id) ON UPDATE CASCADE ,
+	CONSTRAINT DiferencaCaixa_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT DiferencaCaixa_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE MovimentoCaixa
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	CaixaId INT DEFAULT NULL,
+	TipoPagamentoId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL,
+	Valor FLOAT NOT NULL,
+	DebCred varchar(1) NOT NULL,
+	Status INT DEFAULT '0',
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT MovimentoCaixaId PRIMARY KEY (Id),
+	CONSTRAINT MovimentoCaixa_CaixaId FOREIGN KEY (CaixaId) REFERENCES Caixa (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoCaixa_TipoPagamentoId FOREIGN KEY (TipoPagamentoId) REFERENCES TipoPagamento (Id) ON UPDATE CASCADE ,
+	CONSTRAINT MovimentoCaixa_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoCaixa_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE MovimentoContaLivroCaixa
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ContaLivroCaixaId INT DEFAULT NULL,
+	MovimentoContaADMId INT DEFAULT NULL,
+	MovimentoContaBancariaId INT DEFAULT NULL,
+	MovimentoCaixaId INT DEFAULT NULL,
+	NumeroDocumento varchar(20) NOT NULL,
+	Data TIMESTAMP NOT NULL,
+	Valor FLOAT NOT NULL,
+	DebCred varchar(1) NOT NULL,
+	Status INT DEFAULT '0',
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT MovimentoContaLivroCaixaId PRIMARY KEY (Id),
+	CONSTRAINT MovimentoContaLivroCaixa_MovimentoContaADMId FOREIGN KEY (MovimentoContaADMId) REFERENCES MovimentoContaADM (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoContaLivroCaixa_ContaLivroCaixaId FOREIGN KEY (ContaLivroCaixaId) REFERENCES ContaLivroCaixa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT MovimentoContaLivroCaixa_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoContaLivroCaixa_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE MovimentoContaBancaria
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ContaBancariaId INT DEFAULT NULL,
+	MovimentoContaADMId INT DEFAULT NULL,
+	MovimentoContaLivroCaixaId INT DEFAULT NULL,
+	MovimentoCaixaId INT DEFAULT NULL,
+	MovimentoCartaoId INT DEFAULT NULL,
+	NumeroDocumento varchar(20) NOT NULL,
+	Data TIMESTAMP NOT NULL,
+	Valor FLOAT NOT NULL,
+	DebCred varchar(1) NOT NULL,
+	Status INT DEFAULT '0',
+	Observacao TEXT ,
+	Conciliado BOOL DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT MovimentoContaBancariaId PRIMARY KEY (Id),
+	CONSTRAINT MovimentoContaBancaria_MovimentoContaADMId FOREIGN KEY (MovimentoContaADMId) REFERENCES MovimentoContaADM (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoContaBancaria_MovimentoCartaoId FOREIGN KEY (MovimentoCartaoId) REFERENCES MovimentoCartao (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoContaBancaria_MovimentoCaixaId FOREIGN KEY (MovimentoCaixaId) REFERENCES MovimentoCaixa (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoContaBancaria_MovimentoContaLivroCaixaId FOREIGN KEY (MovimentoContaLivroCaixaId) REFERENCES MovimentoContaLivroCaixa (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoContaBancaria_ContaBancariaId FOREIGN KEY (ContaBancariaId) REFERENCES ContaBancaria (Id) ON UPDATE CASCADE ,
+	CONSTRAINT MovimentoContaBancaria_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoContaBancaria_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE MovimentoCliente
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ClienteId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL,
+	Valor FLOAT NOT NULL,
+	DebCred varchar(1) NOT NULL,
+	Status INT DEFAULT '0',
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT MovimentoClienteId PRIMARY KEY (Id),
+	CONSTRAINT MovimentoCliente_ClienteId FOREIGN KEY (ClienteId) REFERENCES Cliente (Id) ON UPDATE CASCADE ,
+	CONSTRAINT MovimentoCliente_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT MovimentoCliente_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Agenda
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ClienteId INT DEFAULT NULL,
+	ClienteUserAPPId INT DEFAULT NULL,
+	ProfissionalId INT DEFAULT NULL,
+	ServicoId INT DEFAULT NULL,
+	SalaId INT DEFAULT NULL,
+	FichaId INT DEFAULT NULL,
+	TipoOcupadoId INT DEFAULT NULL,
+	CreditoServicoId INT DEFAULT NULL,
+	ProntuarioId INT DEFAULT NULL,
+	ConfirmadoPorId INT DEFAULT NULL,
+	Inicio TIMESTAMP NOT NULL,
+	Fim TIMESTAMP NOT NULL,
+	HoraChegada TIMESTAMP DEFAULT NULL,
+	HoraInicioServico TIMESTAMP DEFAULT NULL,
+	HoraFinalServico TIMESTAMP DEFAULT NULL,
+	Status varchar(3) NOT NULL DEFAULT 'AGD',
+	Tipo varchar(3) NOT NULL,
+	Rodizio varchar(1) DEFAULT NULL,
+	DataConfirmacao TIMESTAMP DEFAULT NULL,
+	Observacao TEXT ,
+	OrdemChegada INT NOT NULL DEFAULT '0',
+	PrefereProfissional BOOL DEFAULT FALSE,
+	PrefereSala BOOL DEFAULT FALSE,
+	SMSAgenda BOOL DEFAULT FALSE,
+	SMSAntes BOOL DEFAULT FALSE,
+	ProntuarioImp varchar(1) DEFAULT NULL,
+	ContatoNome varchar(50) DEFAULT NULL,
+	ContatoTelefone varchar(50) DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT AgendaId PRIMARY KEY (Id),
+	CONSTRAINT Agenda_ClienteId FOREIGN KEY (ClienteId) REFERENCES Cliente (Id) ON UPDATE CASCADE,
+	CONSTRAINT Agenda_FichaId FOREIGN KEY (FichaId) REFERENCES Ficha (Id) ON UPDATE CASCADE,
+	CONSTRAINT Agenda_SalaId FOREIGN KEY (SalaId) REFERENCES Sala (Id) ON UPDATE CASCADE,
+	CONSTRAINT Agenda_ServicoId FOREIGN KEY (ServicoId) REFERENCES Servico (Id) ON UPDATE CASCADE,
+	CONSTRAINT Agenda_ConfirmadoId FOREIGN KEY (ConfirmadoPorId) REFERENCES Profissional (Id) ON UPDATE CASCADE,
+	CONSTRAINT Agenda_TipoOcupadoId FOREIGN KEY (TipoOcupadoId) REFERENCES TipoOcupado (Id) ON UPDATE CASCADE,
+	CONSTRAINT Agenda_ProfissionalId FOREIGN KEY (ProfissionalId) REFERENCES Profissional (Id) ON UPDATE CASCADE ,
+	CONSTRAINT Agenda_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Agenda_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE PagamentoFicha
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	TipoPagamentoId INT DEFAULT NULL,
+	MovimentoCaixaId INT DEFAULT NULL,
+	PagamentoFichaId INT DEFAULT NULL,
+	Ordem INT NOT NULL,
+	Valor FLOAT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	DataPrevista TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT PagamentoFichaId PRIMARY KEY (Id),
+	CONSTRAINT PagamentoFicha_TipoPagamentoId FOREIGN KEY (TipoPagamentoId) REFERENCES TipoPagamento (Id) ON UPDATE CASCADE,
+	CONSTRAINT PagamentoFicha_PagamentoFichaId FOREIGN KEY (PagamentoFichaId) REFERENCES PagamentoFicha (Id) ON UPDATE CASCADE,
+	CONSTRAINT PagamentoFicha_MovimentoCaixaId FOREIGN KEY (MovimentoCaixaId) REFERENCES MovimentoCaixa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT PagamentoFicha_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT PagamentoFicha_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE FichaPagamentoFicha
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	FichaId INT DEFAULT NULL,
+	PagamentoFichaId INT DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT FichaPagamentoFichaId PRIMARY KEY (Id),
+	CONSTRAINT FichaPagamentoFicha_FichaId FOREIGN KEY (FichaId) REFERENCES Ficha (Id) ON UPDATE CASCADE,
+	CONSTRAINT FichaPagamentoFicha_PagamentoFichaId FOREIGN KEY (PagamentoFichaId) REFERENCES PagamentoFicha (Id) ON UPDATE CASCADE ,
+	CONSTRAINT FichaPagamentoFicha_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT FichaPagamentoFicha_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE DadosCheque
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ClienteId INT DEFAULT NULL,
+	InstituicaobancariaId INT DEFAULT NULL,
+	PagamentoFichaId INT DEFAULT NULL,
+	MovimentoCaixaId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL,
+	Agencia varchar(6) DEFAULT NULL,
+	ContaCorrente varchar(15) DEFAULT NULL,
+	Numero varchar(10) DEFAULT NULL,
+	Valor FLOAT DEFAULT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT DadosChequeId PRIMARY KEY (Id),
+	CONSTRAINT DadosCheque_MovimentoCaixaId FOREIGN KEY (MovimentoCaixaId) REFERENCES MovimentoCaixa (Id) ON UPDATE CASCADE,
+	CONSTRAINT DadosCheque_ClienteId FOREIGN KEY (ClienteId) REFERENCES Cliente (Id) ON UPDATE CASCADE,
+	CONSTRAINT DadosCheque_PagamentoFichaId FOREIGN KEY (PagamentoFichaId) REFERENCES PagamentoFicha (Id) ON UPDATE CASCADE,
+	CONSTRAINT DadosCheque_InstituicaobancariaId FOREIGN KEY (InstituicaobancariaId) REFERENCES Instituicaobancaria (Id) ON UPDATE CASCADE ,
+	CONSTRAINT DadosCheque_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT DadosCheque_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Cheque
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	DadosChequeId INT DEFAULT NULL,
+	Negociado BOOL DEFAULT NULL,
+	Devolvido BOOL DEFAULT NULL,
+	DataDevolvido TIMESTAMP DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT ChequeId PRIMARY KEY (Id),
+	CONSTRAINT Cheque_DadosChequeId FOREIGN KEY (DadosChequeId) REFERENCES DadosCheque (Id) ON UPDATE CASCADE ,
+	CONSTRAINT Cheque_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Cheque_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE ChequePre
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	DadosChequeId INT DEFAULT NULL,
+	ChequeId INT DEFAULT NULL,
+	DataPrevista TIMESTAMP NOT NULL,
+	Negociado BOOL DEFAULT NULL,
+	Depositado BOOL DEFAULT NULL,
+	DataDeposito TIMESTAMP DEFAULT NULL,
+	DataQuitacao TIMESTAMP DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT ChequePreId PRIMARY KEY (Id),
+	CONSTRAINT ChequePre_ChequeId FOREIGN KEY (ChequeId) REFERENCES Cheque (Id) ON UPDATE CASCADE,
+	CONSTRAINT ChequePre_DadosChequeId FOREIGN KEY (DadosChequeId) REFERENCES DadosCheque (Id) ON UPDATE CASCADE ,
+	CONSTRAINT ChequePre_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT ChequePre_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE ContaReceber
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ClienteId INT DEFAULT NULL,
+	PagamentoFichaId INT DEFAULT NULL,
+	ContaADMId INT DEFAULT NULL,
+	Numero varchar(20) NOT NULL,
+	Parcela varchar(10) NOT NULL,
+	DataEmissao TIMESTAMP NOT NULL,
+	DataVencimento TIMESTAMP NOT NULL,
+	Valor FLOAT DEFAULT NULL,
+	Instrucao TEXT,
+	NumeroDocumento varchar(20) NOT NULL,
+	EspecieDocumento varchar(10) NOT NULL,
+	ValorRecebido FLOAT DEFAULT NULL,
+	ValorDesconto FLOAT DEFAULT NULL,
+	DataRecebido TIMESTAMP DEFAULT NULL,
+	Status varchar(1) DEFAULT '0',
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT ContaReceberId PRIMARY KEY (Id),
+	CONSTRAINT ContaReceber_ClienteId FOREIGN KEY (ClienteId) REFERENCES Cliente (Id) ON UPDATE CASCADE,
+	CONSTRAINT ContaReceber_PagamentoFichaId FOREIGN KEY (PagamentoFichaId) REFERENCES PagamentoFicha (Id) ON UPDATE CASCADE,
+	CONSTRAINT ContaADM_Ctr FOREIGN KEY (ContaADMId) REFERENCES ContaADM (Id) ON UPDATE CASCADE ,
+	CONSTRAINT ContaReceber_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT ContaReceber_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE ContaReceberCheque
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ContaReceberId INT DEFAULT NULL,
+	ChequeId INT DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	Observacao TEXT ,
+	CONSTRAINT ContaReceberChequeId PRIMARY KEY (Id),
+	CONSTRAINT ContaReceberCheque_ContaReceberId FOREIGN KEY (ContaReceberId) REFERENCES ContaReceber (Id) ON UPDATE CASCADE,
+	CONSTRAINT Cheque_CtC FOREIGN KEY (ChequeId) REFERENCES Cheque (Id) ON UPDATE CASCADE ,
+	CONSTRAINT ContaReceberCheque_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT ContaReceberCheque_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE ContaReceberRecebimento
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ContaReceberId INT DEFAULT NULL,
+	MovimentoId INT DEFAULT NULL,
+	MovimentoContaADMId INT DEFAULT NULL,
+	Ordem INT NOT NULL,
+	Data TIMESTAMP NOT NULL,
+	Valor FLOAT DEFAULT NULL,
+	Origem varchar(5) DEFAULT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT ContaReceberRecebimentoId PRIMARY KEY (Id),
+	CONSTRAINT ContaReceberRecebimento_ContaReceberId FOREIGN KEY (ContaReceberId) REFERENCES ContaReceber (Id) ON UPDATE CASCADE,
+	CONSTRAINT ContaReceberRecebimento_MovimentoContaADMId FOREIGN KEY (MovimentoContaADMId) REFERENCES MovimentoContaADM (Id) ON UPDATE CASCADE ,
+	CONSTRAINT ContaReceberRecebimento_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT ContaReceberRecebimento_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE CreditoServico
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ClienteId INT DEFAULT NULL,
+	PacoteId INT DEFAULT NULL,
+	ServicoId INT DEFAULT NULL,
+	AgendaId INT DEFAULT NULL,
+	FichaOrigemId INT NOT NULL,
+	FichaUsoId INT DEFAULT NULL,
+	Valor FLOAT DEFAULT NULL,
+	DataCredito TIMESTAMP NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT CreditoServicoId PRIMARY KEY (Id),
+	CONSTRAINT CreditoServico_ClienteId FOREIGN KEY (ClienteId) REFERENCES Cliente (Id) ON UPDATE CASCADE,
+	CONSTRAINT CreditoServico_ServicoId FOREIGN KEY (ServicoId) REFERENCES Servico (Id) ON UPDATE CASCADE,
+	CONSTRAINT CreditoServico_PacoteId FOREIGN KEY (PacoteId) REFERENCES Pacote (Id) ON UPDATE CASCADE,
+	CONSTRAINT CreditoServico_FichaOrigemId FOREIGN KEY (FichaOrigemId) REFERENCES Ficha (Id) ON UPDATE CASCADE,
+	CONSTRAINT CreditoServico_FichaUsoId FOREIGN KEY (FichaUsoId) REFERENCES Ficha (Id) ON UPDATE CASCADE ,
+	CONSTRAINT CreditoServico_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT CreditoServico_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE EnderecoRegiao
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	RegiaoId INT DEFAULT NULL,
+	EnderecoId INT DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT EnderecoRegiaoId PRIMARY KEY (Id),
+	CONSTRAINT EnderecoRegiao_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT EnderecoRegiao_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE ListaEspera
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ClienteId INT DEFAULT NULL,
+	ProfissionalId INT DEFAULT NULL,
+	ServicoId INT DEFAULT NULL,
+	SalaId INT DEFAULT NULL,
+	Ordem INT NOT NULL,
+	DataInicial TIMESTAMP NOT NULL,
+	DataFinal TIMESTAMP DEFAULT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT ListaEsperaId PRIMARY KEY (Id),
+	CONSTRAINT ListaEspera_ClienteId FOREIGN KEY (ClienteId) REFERENCES Cliente (Id) ON UPDATE CASCADE,
+	CONSTRAINT ListaEspera_SalaId FOREIGN KEY (SalaId) REFERENCES Sala (Id) ON UPDATE CASCADE,
+	CONSTRAINT ListaEspera_ServicoId FOREIGN KEY (ServicoId) REFERENCES Servico (Id) ON UPDATE CASCADE,
+	CONSTRAINT ListaEspera_ProfissionalId FOREIGN KEY (ProfissionalId) REFERENCES Profissional (Id) ON UPDATE CASCADE ,
+	CONSTRAINT ListaEspera_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT ListaEspera_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE MovimentoProfissional
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ProfissionalId INT DEFAULT NULL,
+	ServicoId INT DEFAULT NULL,
+	PagamentoFichaId INT DEFAULT NULL,
+	TipoLancamentoId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL,
+	Valor FLOAT NOT NULL,
+	DebCred varchar(1) NOT NULL,
+	Status INT DEFAULT '0',
+	DataPrevisao TIMESTAMP DEFAULT NULL,
+	JaPago BOOL DEFAULT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT MovimentoProfissionalId PRIMARY KEY (Id),
+	CONSTRAINT MovimentoProfissional_PagamentoFichaId FOREIGN KEY (PagamentoFichaId) REFERENCES PagamentoFicha (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoProfissional_TipoLancamentoId FOREIGN KEY (TipoLancamentoId) REFERENCES TipoPagamento (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoProfissional_ServicoId FOREIGN KEY (ServicoId) REFERENCES Servico (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoProfissional_ProfissionalId FOREIGN KEY (ProfissionalId) REFERENCES Profissional (Id) ON UPDATE CASCADE ,
+	CONSTRAINT MovimentoProfissional_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoProfissional_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE MovimentoContaADMMovimentoCartao
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	MovimentoContaADMId INT DEFAULT NULL,
+	MovimentoCartaoId INT DEFAULT NULL,
+	CONSTRAINT MovimentoContaADMMovimentoCartaoId PRIMARY KEY (Id),
+	CONSTRAINT MovimentoContaADMMovimentoCartao_MovimentoContaADMId FOREIGN KEY (MovimentoContaADMId) REFERENCES MovimentoContaADM (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoContaADMMovimentoCartao_MovimentoCartaoId FOREIGN KEY (MovimentoCartaoId) REFERENCES MovimentoCartao (Id) ON UPDATE CASCADE ,
+	CONSTRAINT MovimentoContaADMMovimentoCartao_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoContaADMMovimentoCartao_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE MovimentoContaADMMovimentoFicha
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	MovimentoContaADMId INT DEFAULT NULL,
+	MovimentoFichaId INT DEFAULT NULL,
+	CONSTRAINT MovimentoContaADMMovimentoFichaId PRIMARY KEY (Id),
+	CONSTRAINT MovimentoContaADMMovimentoFicha_MovimentoContaADMId FOREIGN KEY (MovimentoContaADMId) REFERENCES MovimentoContaADM (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoContaADMMovimentoFicha_MovimentoFichaId FOREIGN KEY (MovimentoFichaId) REFERENCES MovimentoFicha (Id) ON UPDATE CASCADE ,
+	CONSTRAINT MovimentoContaADMMovimentoFicha_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoContaADMMovimentoFicha_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE MovimentoCaixaMovimentoCartao
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	MovimentoCaixaId INT DEFAULT NULL,
+	MovimentoCartaoId INT DEFAULT NULL,
+	CONSTRAINT MovimentoCaixaMovimentoCartaoId PRIMARY KEY (Id),
+	CONSTRAINT MovimentoCaixaMovimentoCartao_MovimentoCaixaId FOREIGN KEY (MovimentoCaixaId) REFERENCES MovimentoCaixa (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoCaixaMovimentoCartao_MovimentoCartaoId FOREIGN KEY (MovimentoCartaoId) REFERENCES MovimentoCartao (Id) ON UPDATE CASCADE ,
+	CONSTRAINT MovimentoCaixaMovimentoCartao_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoCaixaMovimentoCartao_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE MovimentoCaixaMovimentoCliente
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	MovimentoCaixaId INT DEFAULT NULL,
+	MovimentoClienteId INT DEFAULT NULL,
+	CONSTRAINT MovimentoCaixaMovimentoClienteId PRIMARY KEY (Id),
+	CONSTRAINT MovimentoCaixaMovimentoCliente_MovimentoCaixaId FOREIGN KEY (MovimentoCaixaId) REFERENCES MovimentoCaixa (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoCaixaMovimentoCliente_MovimentoClienteId FOREIGN KEY (MovimentoClienteId) REFERENCES MovimentoCliente (Id) ON UPDATE CASCADE ,
+	CONSTRAINT MovimentoCaixaMovimentoCliente_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoCaixaMovimentoCliente_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE MovimentoCaixaPagamentoFicha
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	MovimentoCaixaId INT DEFAULT NULL,
+	PagamentoFichaId INT DEFAULT NULL,
+	CONSTRAINT MovimentoCaixaPagamentoFichaId PRIMARY KEY (Id),
+	CONSTRAINT MovimentoCaixaPagamentoFicha_MovimentoCaixaId FOREIGN KEY (MovimentoCaixaId) REFERENCES MovimentoCaixa (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoCaixaPagamentoFicha_PagamentoFichaId FOREIGN KEY (PagamentoFichaId) REFERENCES PagamentoFicha (Id) ON UPDATE CASCADE ,
+	CONSTRAINT MovimentoCaixaPagamentoFicha_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoCaixaPagamentoFicha_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE MovimentoCartaoPagamentoFicha
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	MovimentoCartaoId INT DEFAULT NULL,
+	PagamentoFichaId INT DEFAULT NULL,
+	CONSTRAINT MovimentoCartaoPagamentoFichaId PRIMARY KEY (Id),
+	CONSTRAINT MovimentoCartaoPagamentoFicha_MovimentoCartaoId FOREIGN KEY (MovimentoCartaoId) REFERENCES MovimentoCartao (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoCartaoPagamentoFicha_PagamentoFichaId FOREIGN KEY (PagamentoFichaId) REFERENCES PagamentoFicha (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoCartaoPagamentoFicha_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoCartaoPagamentoFicha_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE MovimentoClientePagamentoFicha
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	MovimentoClienteId INT DEFAULT NULL,
+	PagamentoFichaId INT DEFAULT NULL,
+	CONSTRAINT MovimentoClientePagamentoFichaId PRIMARY KEY (Id),
+	CONSTRAINT MovimentoClientePagamentoFicha_MovimentoClienteId FOREIGN KEY (MovimentoClienteId) REFERENCES MovimentoCliente (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoClientePagamentoFicha_PagamentoFichaId FOREIGN KEY (PagamentoFichaId) REFERENCES PagamentoFicha (Id) ON UPDATE CASCADE ,
+	CONSTRAINT MovimentoClientePagamentoFicha_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoClientePagamentoFicha_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE MovimentoProfissionalMovimentoFicha
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	MovimentoProfissionalId INT DEFAULT NULL,
+	MovimentoFichaId INT DEFAULT NULL,
+	CONSTRAINT MovimentoProfissionalMovimentoFichaId PRIMARY KEY (Id),
+	CONSTRAINT MovimentoProfissionalMovimentoFicha_MovimentoProfissionalId FOREIGN KEY (MovimentoProfissionalId) REFERENCES MovimentoProfissional (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoProfissionalMovimentoFicha_MovimentoFichaId FOREIGN KEY (MovimentoFichaId) REFERENCES MovimentoFicha (Id) ON UPDATE CASCADE ,
+	CONSTRAINT MovimentoProfissionalMovimentoFicha_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoProfissionalMovimentoFicha_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE MovimentoPromocao
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	PromocaoId INT DEFAULT NULL,
+	ClienteId INT DEFAULT NULL,
+	ServicoId INT DEFAULT NULL,
+	FichaId INT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL,
+	Pontos FLOAT DEFAULT NULL,
+	PontosAntesVencer FLOAT DEFAULT NULL,
+	DebCred varchar(1) NOT NULL,
+	Status INT DEFAULT '0',
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT MovimentoPromocaoId PRIMARY KEY (Id),
+	CONSTRAINT MovimentoPromocao_ClienteId FOREIGN KEY (ClienteId) REFERENCES Cliente (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoPromocao_ServicoId FOREIGN KEY (ServicoId) REFERENCES Servico (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoPromocao_FichaId FOREIGN KEY (FichaId) REFERENCES Ficha (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoPromocao_PromocaoId FOREIGN KEY (PromocaoId) REFERENCES Promocao (Id) ON UPDATE CASCADE ,
+	CONSTRAINT MovimentoPromocao_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoPromocao_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE MovimentoProfissionalValor
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	MovimentoProfissionalId INT DEFAULT NULL,
+	Ordem INT NOT NULL,
+	Tipo varchar(10) NOT NULL,
+	Valor FLOAT NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT MovimentoProfissionalValorId PRIMARY KEY (Id),
+	CONSTRAINT MovimentoProfissionalValor_MovimentoProfissionalId FOREIGN KEY (MovimentoProfissionalId) REFERENCES MovimentoProfissional (Id) ON UPDATE CASCADE ,
+	CONSTRAINT MovimentoProfissionalValor_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT MovimentoProfissionalValor_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE NotaEntradaTitulo
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	NotaEntradaId INT DEFAULT NULL,
+	TituloId INT DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT NotaEntradaTituloId PRIMARY KEY (Id),
+	CONSTRAINT NotaEntradaTitulo_TituloId FOREIGN KEY (TituloId) REFERENCES Titulo (Id) ON UPDATE CASCADE,
+	CONSTRAINT NotaEntradaTitulo_NotaEntradaId FOREIGN KEY (NotaEntradaId) REFERENCES NotaEntrada (Id) ON UPDATE CASCADE ,
+	CONSTRAINT NotaEntradaTitulo_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT NotaEntradaTitulo_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE OrcamentoServico
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	OrcamentoId INT DEFAULT NULL,
+	ServicoId INT DEFAULT NULL,
+	ProfissionalId INT DEFAULT NULL,
+	FichaId INT DEFAULT NULL,
+	Ordem INT NOT NULL,
+	Valor FLOAT DEFAULT NULL,
+	ValorServico FLOAT DEFAULT NULL,
+	Concorrencia BOOL DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	Observacao TEXT ,
+	CONSTRAINT OrcamentoServicoId PRIMARY KEY (Id),
+	CONSTRAINT OrcamentoServico_OrcamentoId FOREIGN KEY (OrcamentoId) REFERENCES Orcamento (Id) ON UPDATE CASCADE,
+	CONSTRAINT OrcamentoServico_ServicoId FOREIGN KEY (ServicoId) REFERENCES Servico (Id) ON UPDATE CASCADE,
+	CONSTRAINT OrcamentoServico_ProfissionalId FOREIGN KEY (ProfissionalId) REFERENCES Profissional (Id) ON UPDATE CASCADE,
+	CONSTRAINT OrcamentoServico_FichaId FOREIGN KEY (FichaId) REFERENCES Ficha (Id) ON UPDATE CASCADE ,
+	CONSTRAINT OrcamentoServico_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT OrcamentoServico_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE Parentesco
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	PessoaId INT DEFAULT NULL,
+	ParenteId INT NOT NULL,
+	Tipo varchar(10) NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT ParentescoId PRIMARY KEY (Id),
+	CONSTRAINT Parentesco_PessoaId FOREIGN KEY (PessoaId) REFERENCES Pessoa (Id) ON UPDATE CASCADE,
+	CONSTRAINT Parentesco_ParenteId FOREIGN KEY (ParenteId) REFERENCES Pessoa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT Parentesco_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT Parentesco_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE ProfissionalCargo
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ProfissionalId INT DEFAULT NULL,
+	CargoId INT DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT ProfissionalCargoId PRIMARY KEY (Id),
+	CONSTRAINT ProfissionalCargo_ProfissionalId FOREIGN KEY (ProfissionalId) REFERENCES Profissional (Id) ON UPDATE CASCADE,
+	CONSTRAINT ProfissionalCargo_CargoId FOREIGN KEY (cargoId) REFERENCES Cargo (Id) ON UPDATE CASCADE ,
+	CONSTRAINT ProfissionalCargo_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT ProfissionalCargo_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE ProfissionalEspecialidade
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ProfissionalId INT DEFAULT NULL,
+	EspecialidadeId INT DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT ProfissionalEspecialidadeId PRIMARY KEY (Id),
+	CONSTRAINT ProfissionalEspecialidade_ProfissionalId FOREIGN KEY (ProfissionalId) REFERENCES Profissional (Id) ON UPDATE CASCADE,
+	CONSTRAINT ProfissionalEspecialidade_EspecialidadeId FOREIGN KEY (EspecialidadeId) REFERENCES Especialidade (Id) ON UPDATE CASCADE ,
+	CONSTRAINT ProfissionalEspecialidade_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT ProfissionalEspecialidade_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE TarefaProfissional
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	TarefaId INT DEFAULT NULL,
+	ProfissionalId INT DEFAULT NULL,
+	DataValidade TIMESTAMP NOT NULL,
+	Ordem INT NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT TarefaProfissionalId PRIMARY KEY (Id),
+	CONSTRAINT TarefaProfissional_ProfissionalId FOREIGN KEY (ProfissionalId) REFERENCES Profissional (Id) ON UPDATE CASCADE,
+	CONSTRAINT TarefaProfissional_TarefaId FOREIGN KEY (TarefaId) REFERENCES Tarefa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT TarefaProfissional_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT TarefaProfissional_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE TarefaProfissionalHorario
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	TarefaProfissionalId INT DEFAULT NULL,
+	HorarioId INT DEFAULT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT TarefaProfissionalHorarioId PRIMARY KEY (Id),
+	CONSTRAINT TarefaProfissionalHorario_TarefaProfissionalId FOREIGN KEY (TarefaProfissionalId) REFERENCES TarefaProfissional (Id) ON UPDATE CASCADE,
+	CONSTRAINT TarefaProfissionalHorario_HorarioId FOREIGN KEY (HorarioId) REFERENCES Horario (Id) ON UPDATE CASCADE ,
+	CONSTRAINT TarefaProfissionalHorario_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT TarefaProfissionalHorario_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE TituloPagamento
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	TituloId INT DEFAULT NULL,
+	MovimentoId INT DEFAULT NULL,
+	Ordem INT NOT NULL,
+	Valor FLOAT DEFAULT NULL,
+	Data TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	Origem varchar(5) DEFAULT NULL,
+	Observacao TEXT ,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL,
+	CONSTRAINT TituloPagamentoId PRIMARY KEY (Id),
+	CONSTRAINT TituloPagamento_TituloId FOREIGN KEY (TituloId) REFERENCES Titulo (Id) ON UPDATE CASCADE ,
+	CONSTRAINT TituloPagamento_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE ,
+	CONSTRAINT TituloPagamento_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE ClienteCategoria
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ClienteId INT NOT NULL,
+	CategoriaId INT NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT ClienteCategoriaId PRIMARY KEY (Id),
+	CONSTRAINT ClienteCategoria_ClienteId FOREIGN KEY (ClienteId) REFERENCES Cliente (Id) ON UPDATE CASCADE,
+	CONSTRAINT ClienteCategoria_CategoriaId FOREIGN KEY (CategoriaId) REFERENCES Categoria (Id) ON UPDATE CASCADE,
+	CONSTRAINT ClienteCategoria_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT ClienteCategoria_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE ClienteFonte
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ClienteId INT NOT NULL,
+	FonteId INT NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT ClienteFonteId PRIMARY KEY (Id),
+	CONSTRAINT ClienteFonte_ClienteId FOREIGN KEY (ClienteId) REFERENCES Cliente (Id) ON UPDATE CASCADE,
+	CONSTRAINT ClienteFonte_FonteId FOREIGN KEY (FonteId) REFERENCES Fonte (Id) ON UPDATE CASCADE,
+	CONSTRAINT ClienteFonte_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT ClienteFonte_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE ClienteConvenio
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ClienteId INT NOT NULL,
+	ConvenioId INT NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT ClienteConvenioId PRIMARY KEY (Id),
+	CONSTRAINT ClienteConvenio_ClienteId FOREIGN KEY (ClienteId) REFERENCES Cliente (Id) ON UPDATE CASCADE,
+	CONSTRAINT ClienteConvenio_ConvenioId FOREIGN KEY (ConvenioId) REFERENCES Convenio (Id) ON UPDATE CASCADE,
+	CONSTRAINT ClienteConvenio_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT ClienteConvenio_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
+
+;create TABLE ClienteEmpresaConveniada
+	(
+	Id SERIAL,
+	EmpresaId INT NOT NULL,
+	FilialId INT NOT NULL,
+	ClienteId INT NOT NULL,
+	EmpresaConveniadaId INT NOT NULL,
+	DataInclusao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorI INT DEFAULT NULL,
+	DataAlteracao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	OperadorA INT DEFAULT NULL ,
+	CONSTRAINT ClienteEmpresaConveniadaId PRIMARY KEY (Id),
+	CONSTRAINT ClienteEmpresaConveniada_ClienteId FOREIGN KEY (ClienteId) REFERENCES Cliente (Id) ON UPDATE CASCADE,
+	CONSTRAINT ClienteEmpresaConveniada_EmpresaConveniadaId FOREIGN KEY (EmpresaConveniadaId) REFERENCES EmpresaConveniada (Id) ON UPDATE CASCADE,
+	CONSTRAINT ClienteEmpresaConveniada_EmpresaId FOREIGN KEY (EmpresaId) REFERENCES Empresa (Id) ON UPDATE CASCADE,
+	CONSTRAINT ClienteEmpresaConveniada_FilialId FOREIGN KEY (FilialId) REFERENCES Empresa (Id) ON UPDATE CASCADE
+	)
