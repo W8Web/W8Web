@@ -3,7 +3,7 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 
 const intervaloCab = (page: number, pageSize: number, length: number) => {
   if (length == 0 || pageSize == 0) { return `0 de ${length}`; }
-  
+
   length = Math.max(length, 0);
 
   const startIndex = page * pageSize;
@@ -17,14 +17,17 @@ const intervaloCab = (page: number, pageSize: number, length: number) => {
 }
 
 
+// tslint:disable-next-line: typedef
 export function traduzPaginator() {
-  
+
     const paginatorIntl = new MatPaginatorIntl();
-  
-  paginatorIntl.itemsPerPageLabel = 'Itens por pagina:';
-  paginatorIntl.nextPageLabel = 'Próxima pagina';
-  paginatorIntl.previousPageLabel = 'Pagina anterior';
-  paginatorIntl.getRangeLabel = intervaloCab;
-  
-  return paginatorIntl;
+
+    paginatorIntl.itemsPerPageLabel = 'Itens por página:';
+    paginatorIntl.nextPageLabel = 'Próxima página';
+    paginatorIntl.previousPageLabel = 'Página anterior';
+    paginatorIntl.firstPageLabel = 'Primeira página';
+    paginatorIntl.lastPageLabel = 'Última página';
+    paginatorIntl.getRangeLabel = intervaloCab;
+
+    return paginatorIntl;
 }

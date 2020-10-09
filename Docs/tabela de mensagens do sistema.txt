@@ -1,0 +1,55 @@
+[0001] Ficha emitida após dia do caixa... " "Fch: 9999999"  - digitação de fichas - quando a data do caixa for menor que  data da ficha
+[0002] Mais de um profissional de venda primeiro marque a linha do profissional.. " "Fch: 999999" digitação de fichas - botão estoque com mais de uma linha com venda de produtos
+[0003] Exclusão não é permitido para este tipo de Ficha... " "Fch: 999999" digitação de fichas - tentativa de excluir linha para fichas pendentes ou pré-datadas
+[0004] CPF do cliente inválido... " "Fch: 999999" digitação de fichas - cpf na nota com cpf invalido do cliente
+[0005] Alteração não é permitido para este tipo de ficha... " "Fch: 999999" digitação de fichas - alteração para ficha pendente ou pré-datada
+[0006] Alteração não é permitido para este tipo de ficha... " "Fch: 999999" digitação de fichas - inclusão de linha para ficha pendente ou pré-datada
+[0007] Profissional xxxxxxxxxx não cadastrado para a atividade xxxxxxxxxxx" "Fch: 999999" digitação de fichas - profissional não executa o serviço
+[0009] Alteração não é permitido para este tipo de ficha... " "Fch: 999999" digitação de fichas - inclusão de linha para ficha pendente ou pré-datada
+[0010] Sem local para debito automático da vendas!" digitação de fichas - iniciar a tela sem o parâmetro de local de debito para vendas (estoque multi-local)
+[0011] Sem local para debito automático da consumo!" digitação de fichas - iniciar a tela sem o parâmetro de local de debito para consumo (estoque multi-local)
+[0012] Sem serviços para venda de produtos!" digitação de fichas - iniciar a tela sem o serviço de venda de produto cadastrado
+[0013] Este caixa esta fora da data limite de manutenção..." digitação de fichas - o caixa selecionado esta fora da data limite de alteração do sistema
+[0014] Número de ficha não encontrado... " "Fch: 999999" digitação de fichas - o numero informado não existe
+[0015] Ficha emitida após dia do caixa... " "Fch: 999999" digitação de fichas - a data da ficha é de antes da data do caixa
+[0016] Número já digitada como acumulada! " "Fch: 999999" digitação de fichas - o numero informado ja foi digitado como acumulado 
+[0017] Esta ficha já esta paga... " "Fch: 999999" digitação de fichas - o numero informado ja foi pago 
+[0018] Esta ficha já esta paga... " "Fch: 999999" digitação de fichas - o numero informado ja foi pago 
+[0019] Processo não é permitido para este tipo de Ficha... " "Fch: 999999" digitação de fichas - alteração para ficha pendente ou pré-datada
+[0020] Processo não é permitido para este tipo de Ficha... " "Fch: 999999" digitação de fichas - alteração para ficha pendente ou pré-datada
+[0021] Cliente não possui ficha... " "Fch: 999999" digitação de fichas - selecionado um cliente que não tem ficha aberta
+[0022] Ficha ja esta paga... " "Fch: 999999" digitação de fichas - numero informado ja esta pago
+[0023] Este Processo não é permitido para este tipo de Ficha... " "Fch: 999999" digitação de fichas - alterar ficha pendente ou pré-datada
+
+[0079] Confirme abandonar a digitação da ficha " "Fch: 999999" digitação de fichas - teclado botão escape
+[0080] Nenhum caixa aberto neste dia... " "deseja abrir agora?" digitação de fichas
+[0081] Nenhum caixa aberto neste dia... " "deseja abrir agora?" digitação de fichas - existe caixas no dia mas nenhum esta aberto
+[0082] Este caixa não foi aberto! deseja abrir-lo agora?" digitação de fichas - o caixa selecionado ainda não foi aberto
+[0083] Este caixa já foi fechado! deseja reabrir agora?" digitação de fichas - o caixa selecionado ja foi fechado
+[0084] Esta ficha possue serviços não liberados xxxxxxxxxxxx Confirma ? " digitação de fichas - o parâmetro de libreração dos serviços esta ligado e existe serviços sem liberação
+[0085] Esta ficha possue serviços não liberados xxxxxxxxxxxx " digitação de fichas - não confirmou os serviços não liberados
+[0086] Esta ficha já esta aberta no microterminal? " "Fch: 999999" digitação de fichas - confirma ou não ficha em digitação no microterminal
+[0087] Cliente com cadastro incompleto xxxxx altera agora? " "Fch: 999999" digitação de fichas - confirma ou não alterar os dados do cliente
+[0088] Confirme o convênio xxxxxxx  ? Atenção VALORES ANTERIORES NÃO SERÃO ALTERADOS " "Fch: 999999" digitação de fichas - quando altera o convênio do cliente
+[0089] Confirme encerramento da digitação dos serviços da ficha " "Fch: 999999" digitação de fichas - confirma finalizar a ficha
+
+[0608] Sua liberação expirara em 99 dias - inicio do sistema teste no servidor
+[0609] Sua liberação expirara em 99 dias - inicio do sistema teste na estação
+[0610] Usuário ainda não registrou sua chegada !!! registrar agora ?" - acesso do usuário com parâmetro de registra a chegada
+
+[0955] Não foi possível carregar o arquivo xxxxxx Contate o suporte técnico" carga do sistema - não encontrou o arquivo 
+[0956] Confirma bloquear clientes com pendencias vencidas? " "Atenção, os clientes somente serão desbloqueados manualmente" inicio do sistema com parâmetro bloqueia cliente igual a sim
+[0958] Hora Inválida !" digitação de horario com menos de quatro caracteres
+[0959] Hora Inválida !" digitação de hora maior que 23:59
+[0960] Minuto Inválido !" digitação de hora com minuto maior que 59
+[0961] Minuto Inválido !" digitação de hora com minuto invalido
+
+[2433] erro para procurar foto do cliente
+[2434] erro para procurar foto de anamnese do cliente
+[2435] erro para procurar foto do item
+
+[2865] Atualiza Agenda: <Tipo>  Cli:999999 Data:99/99/9999 Pfs:999 Ficha:999999  - atualizar o horario da agenda 
+
+[3500] Nome digitado diferente no cadastro"  pesquisa de contas a receber  seleção diferente da digitação
+[3501] Não É Possível Excluir Conta ja Paga !" manutenção de contas a pagar - tentativa de excluir conta paga - primeiro reabra a conta
+
