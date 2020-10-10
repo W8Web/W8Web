@@ -21,11 +21,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { traduzPaginator } from './utilitarios/funcoesPadroes';
 
 import { CidadeComponent } from './geral/cidade/cidade.component';
-import { CidadeService } from './geral/cidade.service';
+import { CidadeService } from './geral/services/cidade.service';
 import { CidadeDetalheComponent } from './geral/cidade-detalhe/cidade-detalhe.component';
 import { AtividadeComponent } from './profissionais/atividade/atividade.component';
 import { ProfissionalComponent } from './profissionais/profissional/profissional.component';
 import { EmpresaComponent } from './geral/empresa/empresa.component';
+import { InstituicaoBancariaComponent } from './geral/instituicao-bancaria/instituicao-bancaria.component';
+import { InstuticaoBancariaDetalheComponent } from './geral/instuticao-bancaria-detalhe/instuticao-bancaria-detalhe.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { EmpresaComponent } from './geral/empresa/empresa.component';
     CidadeDetalheComponent,
     AtividadeComponent,
     ProfissionalComponent,
-    EmpresaComponent
+    EmpresaComponent,
+    InstituicaoBancariaComponent,
+    InstuticaoBancariaDetalheComponent
   ],
   imports: [
     BrowserModule,

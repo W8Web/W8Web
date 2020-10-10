@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { CidadeService } from '../cidade.service';
+import { CidadeService } from '../services/cidade.service';
 import { CidadeDetalheComponent } from '../cidade-detalhe/cidade-detalhe.component';
 import { Cidade } from './cidade';
 
@@ -90,7 +90,6 @@ export class CidadeComponent implements OnInit {
         });
         this.formCidade.reset();
       });
-
 
   }
 

@@ -2,17 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { Cidade } from "./cidade/cidade";
+import { Cidade } from '../cidade/cidade';
 
-import { environment } from "../../environments/environment";
-import { CidadePagina } from './cidade/cidadePagina';
+import { environment } from '../../../environments/environment';
+import { CidadePagina } from '../cidade/cidadePagina';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CidadeService {
 
-  url: string = environment.apiBaseUrl + "/api/cidades"
+  url: string = environment.apiBaseUrl + '/api/cidades';
 
   constructor(
     private http: HttpClient
@@ -24,10 +24,10 @@ export class CidadeService {
 
   }
 
-  listar( page, size ) : Observable<CidadePagina> {
+  listar( page, size ): Observable<CidadePagina> {
     const params = new HttpParams()
       .set( 'page' , page )
-      .set( 'size', size)
+      .set( 'size', size );
     return this.http.get<any>(`${this.url}?${params.toString()}`);
   }
 

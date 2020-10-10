@@ -1,0 +1,21 @@
+
+<mat-card style="text-align: left;">
+    <mat-card-header>
+        <mat-card-title>
+            <mat-icon>account_balance</mat-icon>
+            Banco
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <p>
+            Número do Banco: <strong> {{ instituicaoBancaria.numero }}</strong> <br />
+            Nome: <strong>{{ instituicaoBancaria.nome }}</strong> <br />
+            Nome reduzido:<strong> {{ instituicaoBancaria.nomeReduzido }}</strong> <br />
+            Observação:<strong> {{ instituicaoBancaria.observacao }}</strong>
+        </p>
+    </mat-card-content>
+
+    <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="fechar()">Fechar</button>
+    </mat-card-actions>
+</mat-card>

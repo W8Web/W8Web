@@ -1,4 +1,4 @@
-<mat-toolbar>
+<mat-toolbar> 
     <mat-icon>location_city</mat-icon>
     Cidades
 </mat-toolbar>
@@ -77,9 +77,6 @@
                            >
             </mat-paginator>
         </div>
-
-
-
     </mat-tab>
   
     <mat-tab >
@@ -94,18 +91,19 @@
                   class="example-form">
     
                 <mat-form-field class="example-full-width">
-                <mat-label>Nome da Cidade</mat-label>
-                <input formControlName="formCidade_nome" 
-                       matInput #nome 
-                       maxlength="50" 
-                       autocomplete="off"
-                       placeholder="Informe o nome da cidade..">
+                    <mat-label>Nome da Cidade</mat-label>
+                    <input formControlName="formCidade_nome" 
+                        matInput #nome 
+                        maxlength="50" 
+                        autocomplete="off"
+                        placeholder="Informe o nome da cidade..">
                        <mat-hint align="start"><strong></strong> </mat-hint>
                        <mat-hint align="end">{{nome.value.length}} / 50</mat-hint>
                 </mat-form-field>
-                <div *ngIf="formCidade.controls.formCidade_nome.errors && !formCidade.controls.formCidade_nome.pristine">
+                <div *ngIf="formCidade.controls.formCidade_nome.errors && 
+                           !formCidade.controls.formCidade_nome.pristine">
                     <div *ngIf="formCidade.controls.formCidade_nome.errors.required">
-                        O nome da cidade deve ser preenchido !
+                    O nome da cidade deve ser preenchido !
                     </div>
                 </div>
     
@@ -119,7 +117,8 @@
                     <mat-hint align="start"><strong></strong> </mat-hint>
                     <mat-hint align="end">{{codIbge.value.length}} / 5</mat-hint>
                 </mat-form-field>
-                <div *ngIf="formCidade.controls.formCidade_codIbge.errors && !formCidade.controls.formCidade_codIbge.pristine">
+                <div *ngIf="formCidade.controls.formCidade_codIbge.errors && 
+                           !formCidade.controls.formCidade_codIbge.pristine">
                     <div *ngIf="formCidade.controls.formCidade_codIbge.errors.required">
                         O código IBGE da cidade deve ser preenchido !
                     </div>
@@ -135,7 +134,8 @@
                     <mat-hint align="start"><strong></strong> </mat-hint>
                     <mat-hint align="end">{{regiao.value.length}} / 20</mat-hint>
                 </mat-form-field>
-                <div *ngIf="formCidade.controls.formCidade_regiao.errors && !formCidade.controls.formCidade_uf.pristine">
+                <div *ngIf="formCidade.controls.formCidade_regiao.errors && 
+                           !formCidade.controls.formCidade_uf.pristine">
                     <div *ngIf="formCidade.controls.formCidade_regiao.errors.required">
                         A região da cidade deve ser preenchida !
                     </div>
@@ -151,7 +151,8 @@
                     <mat-hint align="start"><strong></strong> </mat-hint>
                     <mat-hint align="end">{{uf.value.length}} / 2</mat-hint>
                 </mat-form-field>
-                <div *ngIf="formCidade.controls.formCidade_uf.errors && !formCidade.controls.formCidade_uf.pristine">
+                <div *ngIf="formCidade.controls.formCidade_uf.errors && 
+                           !formCidade.controls.formCidade_uf.pristine">
                     <div *ngIf="formCidade.controls.formCidade_uf.errors.required">
                         O estado da cidade deve ser preenchida !
                     </div>

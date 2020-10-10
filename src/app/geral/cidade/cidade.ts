@@ -1,5 +1,5 @@
 export class Cidade {
-    
+
     id: number;
     codigoIbge: number;
     uf: string;

@@ -1,0 +1,149 @@
+<mat-toolbar>
+    <mat-icon>account_balance</mat-icon>
+    Bancos
+</mat-toolbar>
+
+<mat-tab-group mat-align-tabs="start">
+    
+    <mat-tab label="Lista">
+        <ng-template mat-tab-label>
+            <mat-icon>view_list</mat-icon>
+            Todos os bancos
+        </ng-template>
+
+        <mat-form-field>
+            <mat-label>Filtro</mat-label>
+            <input matInput (keyup)="aplicaFiltro($event)" placeholder="Aplicável à qualquer coluna">
+        </mat-form-field>
+          
+        <div class="mat-elevation-z8 example-full-width">
+            <table mat-table [dataSource]="instituicoesBancarias" matSort class="example-full-width">
+          
+              <!-- numero Column -->
+              <ng-container matColumnDef="numero">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                <td mat-cell (click)="verDetalhes(instituicaoBancaria)" *matCellDef="let instituicaoBancaria "> {{ instituicaoBancaria.numero }} </td>
+              </ng-container>
+          
+              <!-- nome da instituicaoBancaria -->
+              <ng-container matColumnDef="nome">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Nome </th>
+                <td mat-cell (click)="verDetalhes(instituicaoBancaria)" *matCellDef="let instituicaoBancaria "> {{ instituicaoBancaria.nome }} </td>
+              </ng-container>
+          
+              <!-- nome reduzido -->
+              <ng-container matColumnDef="nomeReduzido">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Nome Reduzido </th>
+                <td mat-cell (click)="verDetalhes(instituicaoBancaria)" *matCellDef="let instituicaoBancaria "> {{ instituicaoBancaria.nomeReduzido }} </td>
+              </ng-container>
+          
+              <!-- observação -->
+              <ng-container matColumnDef="observacao">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Observação </th>
+                <td mat-cell (click)="verDetalhes(instituicaoBancaria)" *matCellDef="let instituicaoBancaria "> {{ instituicaoBancaria.observacao }} </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="colunasTab"></tr>
+              <tr mat-row *matRowDef="let row; columns: colunasTab;"></tr>
+
+            </table>
+          
+            <mat-paginator [length]="totalElementos"
+                           [pageSize]="tamanho"
+                           [pageSizeOptions]="pageSizeOptions"
+                           (page)="paginar($event)"
+                           showFirstLastButtons
+                           >
+            </mat-paginator>
+        </div>
+    </mat-tab>
+  
+    <mat-tab >
+        <ng-template mat-tab-label>
+            <mat-icon>add_box</mat-icon>
+            Cadastro
+        </ng-template>
+        <mat-card>
+            <mat-card-title>Nova instituicaoBancaria</mat-card-title>
+            <form [formGroup]="formInstituicaoBancaria"
+                  (ngSubmit) ="submit()"
+                  class="example-form">
+
+                <mat-form-field class="example-full-width">
+                    <mat-label>Número da instituicaoBancaria</mat-label>
+                    <input formControlName="formInstituicaoBancaria_numero" 
+                           matInput #numero 
+                           maxlength="4" 
+                           autocomplete="off"
+                           placeholder="Informe o número da instituicaoBancaria..">
+                    <mat-hint align="start"><strong></strong> </mat-hint>
+                    <mat-hint align="end">{{numero.value.length}} / 4</mat-hint>
+                </mat-form-field>
+                <div *ngIf="formInstituicaoBancaria.controls.formInstituicaoBancaria_numero.errors && 
+                           !formInstituicaoBancaria.controls.formInstituicaoBancaria_numero.pristine">
+                    <div *ngIf="formInstituicaoBancaria.controls.formInstituicaoBancaria_numero.errors.required">
+                    O número da instituicaoBancaria deve ser preenchido !
+                    </div>
+                </div>
+    
+                <mat-form-field class="example-full-width">
+                    <mat-label>Nome da instituicaoBancaria</mat-label>
+                    <input formControlName="formInstituicaoBancaria_nome" 
+                        matInput #nome 
+                        maxlength="50" 
+                        autocomplete="off"
+                        placeholder="Informe o nome da instituicaoBancaria..">
+                    <mat-hint align="start"><strong></strong> </mat-hint>
+                    <mat-hint align="end">{{nome.value.length}} / 50</mat-hint>
+                </mat-form-field>
+                <div *ngIf="formInstituicaoBancaria.controls.formInstituicaoBancaria_nome.errors && 
+                           !formInstituicaoBancaria.controls.formInstituicaoBancaria_nome.pristine">
+                    <div *ngIf="formInstituicaoBancaria.controls.formInstituicaoBancaria_nome.errors.required">
+                        O nome da instituicaoBancaria deve ser preenchido !
+                    </div>
+                </div>
+    
+                <mat-form-field class="example-full-width">
+                    <mat-label>Nome reduzido da instituicaoBancaria</mat-label>
+                    <input formControlName="formInstituicaoBancaria_nomeReduzido"
+                           matInput #nomeReduzido
+                           maxlength="30" 
+                           autocomplete="off"
+                           placeholder="Informe o nome reduzido da instituicaoBancaria..">
+                    <mat-hint align="start"><strong></strong> </mat-hint>
+                    <mat-hint align="end">{{nomeReduzido.value.length}} / 30</mat-hint>
+                </mat-form-field>
+                <div *ngIf="formInstituicaoBancaria.controls.formInstituicaoBancaria_nomeReduzido.errors && 
+                           !formInstituicaoBancaria.controls.formInstituicaoBancaria_nomeReduzido.pristine">
+                    <div *ngIf="formInstituicaoBancaria.controls.formInstituicaoBancaria_nomeReduzido.errors.required">
+                        O nome reduzido da instituicaoBancaria deve ser preenchido !
+                    </div>
+                </div>
+    
+                <mat-form-field class="example-full-width">
+                    <mat-label>Obervação</mat-label>
+                    <input formControlName="formInstituicaoBancaria_observacao" 
+                           matInput #observacao
+                           maxlength="250" 
+                           autocomplete="off"
+                           placeholder="Observação da instituicaoBancaria...">
+                    <mat-hint align="start"><strong></strong> </mat-hint>
+                    <mat-hint align="end">{{observacao.value.length}} / 250</mat-hint>
+                </mat-form-field>
+                <div *ngIf="formInstituicaoBancaria.controls.formInstituicaoBancaria_observacao.errors && 
+                           !formInstituicaoBancaria.controls.formInstituicaoBancaria_observacao.pristine">
+                    <div *ngIf="formInstituicaoBancaria.controls.formInstituicaoBancaria_observacao.errors.required">
+                        A observação da instituicaoBancaria deve ser preenchido !
+                    </div>
+                </div>
+    
+                <button [disabled]="!formInstituicaoBancaria.valid" 
+                        mat-raised-button color="primary">
+                        Adicionar</button>
+    
+            </form>
+        </mat-card>
+    
+    </mat-tab>
+
+</mat-tab-group>
