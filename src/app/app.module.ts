@@ -13,6 +13,7 @@ import { MatPaginatorModule, MatPaginatorIntl } from '@angular/material/paginato
 import { MatSortModule } from '@angular/material/sort';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatMenuModule } from '@angular/material/menu';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -28,6 +29,7 @@ import { ProfissionalComponent } from './profissionais/profissional/profissional
 import { EmpresaComponent } from './geral/empresa/empresa.component';
 import { InstituicaoBancariaComponent } from './geral/instituicao-bancaria/instituicao-bancaria.component';
 import { InstuticaoBancariaDetalheComponent } from './geral/instuticao-bancaria-detalhe/instuticao-bancaria-detalhe.component';
+import { MenuComponent } from './geral/menu/menu.component';
 
 @NgModule({
   declarations: [
@@ -38,8 +40,9 @@ import { InstuticaoBancariaDetalheComponent } from './geral/instuticao-bancaria-
     ProfissionalComponent,
     EmpresaComponent,
     InstituicaoBancariaComponent,
-    InstuticaoBancariaDetalheComponent
-  ],
+    InstuticaoBancariaDetalheComponent,
+    MenuComponent
+   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -54,6 +57,7 @@ import { InstuticaoBancariaDetalheComponent } from './geral/instuticao-bancaria-
     MatSortModule,
     MatDialogModule,
     MatSnackBarModule,
+    MatMenuModule,
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule
